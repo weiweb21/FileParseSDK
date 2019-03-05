@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.yanbenjun.com" xmlns:xns="http://www.yanbenjun.com"
+	elementFormDefault="qualified">
+
+	<xs:attributeGroup name="templateMappingAttrGroup">
+		<!-- 采用此属性，表示按照该模板解析到该模型Class中，生成该模型的对象 -->
+		<xs:attribute name="modelClass" type="xs:string" use="optional"></xs:attribute>
+
+		<!-- typeEnum和type应当合起来使用，采用这两个属性，使用typeEnum指定的枚举类中，id为type的枚举对应的处理器处理，此处应当用map数据作为处理器的入口数据 -->
+		<xs:attribute name="typeEnum" type="xs:string" use="optional"></xs:attribute>
+		<xs:attribute name="type" type="xs:unsignedInt" use="optional"></xs:attribute>
+
+		<!-- 自定义处理器 -->
+		<xs:attribute name="userDefined" type="xs:string" use="optional"></xs:attribute>
+	</xs:attributeGroup>
+
+	<xs:element name="fileParse">
+		<xs:complexType>
+			<xs:sequence maxOccurs="unbounded">
+				<xs:element ref="xns:parseSystem"></xs:element>
+			</xs:sequence>
+		</xs:complexType>
+
+		<!-- 不同解析系统名称不能相同 -->
+		<xs:unique name="parseSystemNameUnique">
+			<xs:selector xpath=".//xns:parseSystem"></xs:selector>
+			<xs:field xpath="@name"></xs:field>
+		</xs:unique>
+	</xs:element>
+	
+	<!-- parseSystem可选元素 -->
+	<xs:group name="systemChoosableElementsGroup">
+	    <xs:choice>
+            <xs:element ref="xns:toParseFile" maxOccurs="unbounded"></xs:element>
+            <xs:element ref="xns:templates" minOccurs="1" maxOccurs="1"></xs:element>
+            <xs:element ref="xns:columns" minOccurs="1" maxOccurs="1"></xs:element>
+            <xs:element ref="xns:files" minOccurs="1" maxOccurs="1"></xs:element>
+        </xs:choice>
+	</xs:group>
+	
+	<xs:element name="files">
+        <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="xns:toParseFile"></xs:element>
+            </xs:sequence>
+            <xs:attribute name="sort" fixed="3" type="xs:string"></xs:attribute>
+        </xs:complexType>
+    </xs:element>
+	
+	<xs:element name="templates">
+        <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="xns:toParseTemplate"></xs:element>
+            </xs:sequence>
+            <xs:attribute name="sort" fixed="2" type="xs:string"></xs:attribute>
+        </xs:complexType>
+    </xs:element>
+    
+	<xs:element name="columns">
+        <xs:complexType>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="xns:columnHead"></xs:element>
+            </xs:sequence>
+            <xs:attribute name="sort" fixed="1" type="xs:string"></xs:attribute>
+        </xs:complexType>
+    </xs:element>
+
+	<xs:element name="parseSystem">
+		<xs:complexType>
+			<xs:choice maxOccurs="unbounded">
+				<xs:group ref="xns:systemChoosableElementsGroup" minOccurs="1" maxOccurs="1"></xs:group>
+				<xs:element ref="xns:parsePoint" maxOccurs="unbounded"></xs:element>
+			</xs:choice>
+
+			<!-- 解析系统唯一名称 -->
+			<xs:attribute name="name" type="xs:string" use="required"></xs:attribute>
+		</xs:complexType>
+
+		<xs:key name="fileKey">
+			<xs:selector xpath="xns:files/xns:toParseFile"></xs:selector>
+			<xs:field xpath="@name"></xs:field>
+		</xs:key>
+		<xs:keyref name="fileKeyRef" refer="xns:fileKey">
+			<xs:selector xpath=".//xns:refFile"></xs:selector>
+			<xs:field xpath="@name"></xs:field>
+		</xs:keyref>
+		      
+        <xs:key name="templateKey">
+            <xs:selector xpath="xns:templates/xns:toParseTemplate"></xs:selector>
+            <xs:field xpath="@name"></xs:field>
+        </xs:key>
+        <xs:keyref name="templateKeyref" refer="xns:templateKey">
+            <xs:selector xpath=".//xns:refTemplate"></xs:selector>
+            <xs:field xpath="@name"></xs:field>
+        </xs:keyref>
+        
+        <xs:key name="columnHeadIdKey2">
+            <xs:selector xpath="xns:columns/xns:columnHead"></xs:selector>
+            <xs:field xpath="@id"></xs:field>
+        </xs:key>
+        <xs:keyref name="columnHeadIdKeyref2" refer="xns:columnHeadIdKey2">
+            <xs:selector xpath=".//xns:refColumn"></xs:selector>
+            <xs:field xpath="@id"></xs:field>
+        </xs:keyref>
+	</xs:element>
+
+	<xs:element name="parsePoint">
+		<xs:complexType>
+			<xs:choice minOccurs="1" maxOccurs="unbounded">
+				<xs:element ref="xns:toParseFile" maxOccurs="unbounded"></xs:element>
+				<xs:element ref="xns:refFile" maxOccurs="unbounded"></xs:element>
+			</xs:choice>
+
+			<!-- 解析点唯一ID -->
+			<xs:attribute name="id" type="xs:unsignedLong" use="required"></xs:attribute>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="toParseFile">
+		<xs:complexType>
+			<xs:choice maxOccurs="unbounded">
+				<xs:element ref="xns:toParseTemplate"></xs:element>
+				<!-- <xs:element name="refTemplate">
+					<xs:complexType>
+						<xs:attribute name="name" type="xs:string" use="required" />
+						<xs:attributeGroup ref="xns:templateMappingAttrGroup"></xs:attributeGroup>
+					</xs:complexType>
+				</xs:element> -->
+				<xs:element ref="xns:refTemplate"></xs:element>
+			</xs:choice>
+			<!-- 解析文件唯一名称 -->
+			<xs:attribute name="name" type="xs:string" use="required" />
+			<xs:attribute name="rowTag" type="xs:string"/>
+			<xs:attribute name="mode" default="single" use="optional">
+			    <xs:simpleType>
+			        <xs:restriction base="xs:string">
+			            <xs:enumeration value="single"></xs:enumeration>
+			            <xs:enumeration value="multi"></xs:enumeration>
+			        </xs:restriction>
+			    </xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="type" default="xlsx" use="optional">
+			    <xs:simpleType>
+			        <xs:restriction base="xs:string">
+			            <xs:enumeration value="xlsx"></xs:enumeration>
+			            <xs:enumeration value="xls"></xs:enumeration>
+			            <xs:enumeration value="xml"></xs:enumeration>
+			            <xs:enumeration value="text"></xs:enumeration>
+			        </xs:restriction>
+			    </xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="refFile">
+		<xs:complexType>
+			<!-- 此处一定要加type类型，不然keyref限制时，再使用时会报错 -->
+			<xs:attribute name="name" type="xs:string" use="required"></xs:attribute>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="toParseTemplate">
+		<xs:complexType>
+			<xs:choice maxOccurs="unbounded">
+				<xs:element ref="xns:columnHead" maxOccurs="unbounded"></xs:element>
+				<xs:element ref="xns:refColumn" maxOccurs="unbounded"></xs:element>
+			</xs:choice>
+			<xs:attribute name="name" type="xs:string" use="optional"/>
+			<xs:attribute name="sheetIndex" type="xs:unsignedInt" use="required"></xs:attribute>
+			<xs:attribute name="headRow" type="xs:unsignedInt"
+				default="0"></xs:attribute>
+			<xs:attribute name="contentStartRow" type="xs:positiveInteger"
+				default="1"></xs:attribute>
+			<xs:attribute name="postChain" type="xs:string" default="buildin"></xs:attribute>
+
+			<xs:attributeGroup ref="xns:templateMappingAttrGroup"></xs:attributeGroup>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="refTemplate">
+        <xs:complexType>
+            <!-- 此处一定要加type类型，不然keyref限制时，再使用时会报错 -->
+            <xs:attribute name="name" type="xs:string" use="required"></xs:attribute>
+            <xs:attribute name="sheetIndex" type="xs:unsignedInt" use="optional"></xs:attribute>
+            <xs:attributeGroup ref="xns:templateMappingAttrGroup"></xs:attributeGroup>
+        </xs:complexType>
+    </xs:element>
+
+	<xs:element name="columnHead">
+		<xs:complexType>
+			<xs:attributeGroup ref="xns:columnAttrGroup" />
+		</xs:complexType>
+	</xs:element>
+	
+	   
+    <xs:element name="refColumn">
+        <xs:complexType>
+            <!-- 此处一定要加type类型，不然keyref限制时，再使用时会报错 -->
+            <xs:attribute name="id" type="xs:string" use="required">
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+	
+    <xs:attributeGroup name="columnAttrGroup">
+        <xs:attribute name="id" type="xs:string" use="optional"></xs:attribute>
+        <xs:attribute name="ref" type="xs:string" use="optional"></xs:attribute>
+        <xs:attribute name="titleName" type="xs:string"></xs:attribute>
+        <xs:attribute name="fieldName" type="xs:string"></xs:attribute>
+        <xs:attribute name="required" type="xs:boolean" default="false"></xs:attribute>
+        <xs:attribute name="type" type="xs:string" default="string"></xs:attribute>
+        <xs:attribute name="horizontalMerger" type="xs:string"></xs:attribute>
+        <xs:attribute name="xmlExtendInfo" type="xs:string"></xs:attribute>
+    </xs:attributeGroup>
+</xs:schema>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<fileParse xmlns="http://www.yanbenjun.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.yanbenjun.com fileParse.xsd">
+    <!-- 
+        *解析系统，集成到业务系统中，让业务系统能够方便的让开发整合excel、csv、xml数据解析功能到业务系统；
+        *可以灵活的配置不同的模板、或者竟可能多的包络系统已知属性，形成一个通用模板；
+        *具体用什么model装数据、存储到什么数据库、可以配置到xml里写死（适合固定模板的解析）；也可以不用配置，等用户上传
+        *完文件后，让用户确认文件类型或者将类型写入到Excel自动识别（和业务有关），类型可以知道数据存储的java模型和具体入库
+        *数据库。
+     -->
+	<parseSystem name="test">
+		<!-- 通用列配置 -->
+		<columns>
+			<columnHead id="1" titleName="序号" fieldName="index"
+				required="true" type="integer" />
+			<columnHead id="2" titleName="关键字" fieldName="key"
+				required="true" type="string" />
+			<columnHead id="3" titleName="名称" fieldName="name" type="string" />
+			<columnHead id="4" titleName="经度" fieldName="lng" type="double" />
+			<columnHead id="5" titleName="纬度" fieldName="lat" type="double" horizontalMerger="doubleadd"/>
+		</columns>
+
+		<!-- 通用sheet模板配置 -->
+		<templates>
+			<toParseTemplate name="myTemplate" sheetIndex="1">
+				<columnHead titleName="序号" fieldName="index" required="true"
+					type="integer" />
+				<columnHead titleName="名称" fieldName="name" required="true"
+					type="string" />
+				<columnHead titleName="分类" fieldName="category" required="true"
+					type="string" />
+				<columnHead titleName="所属技术类" fieldName="techonology"
+					type="string" />
+				<columnHead titleName="是否掌握" fieldName="grasp" type="boolean" />
+			</toParseTemplate>
+			<toParseTemplate name="testTemplate" sheetIndex="1">
+				<refColumn id="1" />
+				<refColumn id="2" />
+				<refColumn id="3" />
+				<refColumn id="4" />
+				<refColumn id="5" />
+			</toParseTemplate>
+		</templates>
+
+		<!-- 通用解析文件配置 -->
+		<files>
+			<toParseFile name="myTestFile" mode="single">
+				<refTemplate name="myTemplate" />
+			</toParseFile>
+		</files>
+
+        <!-- 解析点，具体的业务系统，哪里需要解析文件，只需要在请求中传入该解析点ID，就可以自动根据解析点的配置，自动解析入库 -->
+		<parsePoint id="20180715">
+			<toParseFile name="test" mode="multi">
+				<toParseTemplate sheetIndex="0">
+					<refColumn id="1" />
+					<refColumn id="2" />
+					<refColumn id="3" />
+					<refColumn id="4" />
+					<refColumn id="5" />
+				</toParseTemplate>
+				<refTemplate name="myTemplate" />
+			</toParseFile>
+			<toParseFile name="test" type="xml" rowTag="book">
+                <toParseTemplate sheetIndex="0" headRow="0" contentStartRow="1">
+                    <columnHead titleName="ASDL" fieldName="ASDL" required="true"
+                        type="string" xmlExtendInfo='{"xmlPath":{"path":["simpleData"]},"pathDirect":1,"keyPath":2,"valuePath":3,"attrName":"name","attrValue":"ASDL"}'/>
+                    <columnHead titleName="HTTP" fieldName="HTTP" required="true"
+                        type="string" xmlExtendInfo='{"xmlPath":{"path":["simpleData"]},"pathDirect":1,"keyPath":2,"valuePath":3,"attrName":"name","attrValue":"HTTP"}'/>
+                    <columnHead titleName="age" fieldName="age" required="true"
+                        type="string" xmlExtendInfo='{"xmlPath":{"path":["simpleData"]},"pathDirect":1,"keyPath":2,"valuePath":3,"attrName":"class","attrValue":"age"}'/>
+                    <columnHead titleName="TCP" fieldName="TCP" required="true"
+                        type="string" xmlExtendInfo='{"xmlPath":{"path":["simpleData"]},"pathDirect":1,"keyPath":2,"valuePath":3,"attrName":"name","attrValue":"TCP"}'/>
+                    <columnHead titleName="name" fieldName="name" required="true"
+                        type="string" xmlExtendInfo='{"xmlPath":{"path":[]},"pathDirect":0,"keyPath":1,"valuePath":2,"attrName":"name","attrValue":""}'/>
+                </toParseTemplate>
+            </toParseFile>
+		</parsePoint>
+		
+		<!-- 解析点，具体的业务系统，哪里需要解析文件，只需要在请求中传入该解析点ID，就可以自动根据解析点的配置，自动解析入库 -->
+        <parsePoint id="20180916">
+            <toParseFile name="test" mode="single">
+                <toParseTemplate sheetIndex="0" headRow="0" contentStartRow="1">
+                    <columnHead titleName="ASDL" fieldName="ASDL" required="true"
+                        type="string" xmlExtendInfo='{"xmlPath":{"path":["simpleData"]},"pathDirect":1,"keyPath":2,"valuePath":3,"attrName":"name","attrValue":"ASDL"}'/>
+                    <columnHead titleName="HTTP" fieldName="HTTP" required="true"
+                        type="string" xmlExtendInfo='{"xmlPath":{"path":["simpleData"]},"pathDirect":1,"keyPath":2,"valuePath":3,"attrName":"name","attrValue":"HTTP"}'/>
+                    <columnHead titleName="age" fieldName="age" required="true"
+                        type="string" xmlExtendInfo='{"xmlPath":{"path":["simpleData"]},"pathDirect":1,"keyPath":2,"valuePath":3,"attrName":"class","attrValue":"age"}'/>
+                    <columnHead titleName="TCP" fieldName="TCP" required="true"
+                        type="string" xmlExtendInfo='{"xmlPath":{"path":["simpleData"]},"pathDirect":1,"keyPath":2,"valuePath":3,"attrName":"name","attrValue":"TCP"}'/>
+                    <columnHead titleName="name" fieldName="name" required="true"
+                        type="string" xmlExtendInfo='{"xmlPath":{"path":[]},"pathDirect":0,"keyPath":1,"valuePath":2,"attrName":"name","attrValue":""}'/>
+                </toParseTemplate>
+            </toParseFile>
+        </parsePoint>
+		
+        <!-- 通用解析文件配置 -->
+        <files>
+            <toParseFile name="myTestFile1" mode="single">
+                <refTemplate name="myTemplate" />
+            </toParseFile>
+        </files>
+		<!-- ERROR WITH myFile0，NO name with this <refToParseFile name="myFile0"/> -->
+	</parseSystem>
+</fileParse>
