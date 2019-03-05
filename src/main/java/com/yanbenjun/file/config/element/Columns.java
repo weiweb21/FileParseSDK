@@ -47,4 +47,10 @@ public class Columns extends XElement
     {
         return this.columnHeadMap.toString();
     }
+
+    @Override
+    public void clear()
+    {
+        columnHeadMap.clear();
+    }
 }

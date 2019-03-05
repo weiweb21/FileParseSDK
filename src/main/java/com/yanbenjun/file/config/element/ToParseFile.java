@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.alibaba.fastjson.JSON;
+
 @XmlElement(name="toParseFile")
 public class ToParseFile extends XElement
 {
@@ -112,5 +114,17 @@ public class ToParseFile extends XElement
     {
         this.rowTag = rowTag;
     }
+
+    @Override
+    public void clear()
+    {
+        toParseTemplates.clear();
+        toParseIndexSet.clear();
+        toParseTemplateMap.clear();
+    }
     
+    @Override
+    public String toString() {
+        return JSON.toJSONString(this);
+    }
 }

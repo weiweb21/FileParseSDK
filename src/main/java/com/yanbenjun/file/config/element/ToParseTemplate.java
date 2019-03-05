@@ -315,4 +315,10 @@ public class ToParseTemplate extends XElement implements XElementAddable
         this.postChain = postChain;
     }
 
+    @Override
+    public void clear()
+    {
+        toParseHead = null;
+    }
+
 }

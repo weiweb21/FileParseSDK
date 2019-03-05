@@ -51,4 +51,10 @@ public class Templates extends XElement
     {
         return toParseTemplateMap.get(name);
     }
+
+    @Override
+    public void clear()
+    {
+        toParseTemplateMap.clear();
+    }
 }

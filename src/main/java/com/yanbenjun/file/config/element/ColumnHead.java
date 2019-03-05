@@ -161,4 +161,11 @@ public class ColumnHead extends XElement
     {
         this.extendInfo = extendInfo;
     }
+
+    @Override
+    public void clear()
+    {
+        // TODO Auto-generated method stub
+        
+    }
 }

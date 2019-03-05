@@ -1,7 +1,9 @@
 package com.yanbenjun.file.config.element;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @XmlElement(name="parsePoint")
 public class ParsePoint extends XElement implements XElementAddable
@@ -23,6 +25,8 @@ public class ParsePoint extends XElement implements XElementAddable
     @XmlElement(name="toParseFile",subElement=ToParseFile.class)
     @XmlElement(name="refFile")
     private List<ToParseFile> toParseFileList = new ArrayList<ToParseFile>();
+    
+    private Map<String, ToParseFile> toParseFileMap = new HashMap<>();
 
     @Override
     public void add(XElement xe)
@@ -33,11 +37,9 @@ public class ParsePoint extends XElement implements XElementAddable
     public void add(ToParseFile toParseFile)
     {
         toParseFileList.add(toParseFile);
-    }
-    
-    public void addAll(List<ToParseFile> toParseFiles)
-    {
-        toParseFileList.addAll(toParseFiles);
+        if (toParseFile.getName() != null) {
+            toParseFileMap.put(toParseFile.getName(), toParseFile);
+        }
     }
     
     public String toString()
@@ -59,10 +61,22 @@ public class ParsePoint extends XElement implements XElementAddable
     {
         return toParseFileList;
     }
-
-    public void setToParseFileList(List<ToParseFile> toParseFileList)
+    
+    public ToParseFile getToParseFile(int index)
     {
-        this.toParseFileList = toParseFileList;
+        return toParseFileList.get(index);
+    }
+    
+    public ToParseFile getToParseFile(String name)
+    {
+        return toParseFileMap.get(name);
+    }
+
+    @Override
+    public void clear()
+    {
+        toParseFileList.clear();
+        toParseFileMap.clear();
     }
 
 }

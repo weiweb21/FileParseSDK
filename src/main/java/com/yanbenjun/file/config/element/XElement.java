@@ -12,7 +12,7 @@ import org.dom4j.Element;
 
 import com.yanbenjun.file.config.ParseConfigurationException;
 
-public class XElement implements XElementAddable
+public abstract class XElement implements XElementAddable
 {
     @XmlAttribute(name="id")
     protected Long id;

@@ -43,4 +43,10 @@ public class Files extends XElement
     {
         return this.toParseFileMap.toString();
     }
+
+    @Override
+    public void clear()
+    {
+        toParseFileMap.clear();
+    }
 }

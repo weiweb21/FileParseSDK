@@ -11,8 +11,7 @@ public class MyRowHandler extends TeminationPostRowHandler
     @Override
     public void processOne(ParsedRow parsedRow, ParseMessage parseMessage) throws RowHandleException
     {
-        // TODO Auto-generated method stub
-        
+        System.out.println(parsedRow.getModelRow());
     }
 
 }

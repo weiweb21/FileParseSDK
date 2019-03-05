@@ -21,5 +21,10 @@ public class ParseConfigurationException extends RuntimeException
     {
         super(message);
     }
+    
+    public ParseConfigurationException(Throwable e)
+    {
+        super(e);
+    }
 
 }
