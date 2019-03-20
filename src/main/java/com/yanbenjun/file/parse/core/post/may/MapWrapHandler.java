@@ -7,7 +7,7 @@ import com.yanbenjun.file.model.parse.ParsedRow;
 import com.yanbenjun.file.parse.core.exception.RowHandleException;
 import com.yanbenjun.file.parse.core.post.MidPostRowHandler;
 import com.yanbenjun.file.parse.core.post.infs.PostRowHandler;
-import com.yanbenjun.file.parse.message.ParseMessage;
+import com.yanbenjun.file.parse.message.ParseContext;
 
 public class MapWrapHandler extends MidPostRowHandler
 {
@@ -25,13 +25,13 @@ public class MapWrapHandler extends MidPostRowHandler
      * 上路对接SameTitleMergeHandler
      */
     @Override
-    public void processOne(ParsedRow parsedRow, ParseMessage parseMessage) throws RowHandleException
+    public void processOne(ParsedRow parsedRow, ParseContext parseContext) throws RowHandleException
     {
         ToParseTemplate toParseTemplate = parsedRow.getCurTemplate();
         Map<String, Object> modelRowMap = toParseTemplate.getFullFieldEmptyMap();
         parsedRow.getCells().stream().forEach(ce->modelRowMap.put(ce.getTitle(), ce.getModelValue()));
         parsedRow.setModelRow(modelRowMap);
-        next.processOne(parsedRow, parseMessage);
+        next.processOne(parsedRow, parseContext);
     }
 
 }

@@ -1,7 +1,5 @@
 package com.yanbenjun.file.config;
 
-import java.util.List;
-
 import com.yanbenjun.file.config.element.ParseSystem;
 import com.yanbenjun.file.config.element.ToParseFile;
 
@@ -46,12 +44,5 @@ public class ParseSystemContext
     public ToParseFile getFileTemplate(Long parsePointId, String fileTemplateName)
     {
         return parseSystem.getParsePoint(parsePointId).getToParseFile(fileTemplateName);
-    }
-    
-
-    public static void main(String[] args)
-    {
-        ParseSystemContext context = new ParseSystemContext("fileParseContext.xml");
-        System.out.println(ParseSystem.singleton());
     }
 }

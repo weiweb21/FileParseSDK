@@ -6,6 +6,7 @@ import java.util.List;
 import com.yanbenjun.file.model.parse.ParsedRow;
 import com.yanbenjun.file.parse.core.exception.RowHandleException;
 import com.yanbenjun.file.parse.core.post.MidPostRowHandler;
+import com.yanbenjun.file.parse.message.ParseContext;
 import com.yanbenjun.file.parse.message.ParseMessage;
 
 /**
@@ -18,10 +19,10 @@ public class CacheHandler extends MidPostRowHandler
     private List<ParsedRow> rowCache = new ArrayList<>();
     private List<ParseMessage> messages = new ArrayList<>();
     @Override
-    public void processOne(ParsedRow parsedRow, ParseMessage parseMessage) throws RowHandleException
+    public void processOne(ParsedRow parsedRow, ParseContext parseContext) throws RowHandleException
     {
         rowCache.add(parsedRow);
-        messages.add(parseMessage);
+        messages.add(parseContext.getCurRowMsg());
     }
     
     public List<ParsedRow> getRowCache()

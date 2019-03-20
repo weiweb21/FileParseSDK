@@ -1,35 +1,29 @@
 package com.yanbenjun.file.config.element;
 
+import java.io.InputStream;
+
+import com.yanbenjun.file.parse.message.ParseContext;
+
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * 需要解析的的文件信息
  * 包括文件全路径、文件解析对应的文件模板：toParseFile
  * @author Administrator
  *
  */
+@Getter
+@Setter
 public class BaseParseFileInfo
 {
-    protected String path;
+
+    private String fileName;
     
+    private InputStream inputStream;
+
+    private ParseContext parseContext = new ParseContext();
     
     private ToParseFile toParseFile;
-    
-    public String getPath()
-    {
-        return path;
-    }
 
-    public void setPath(String path)
-    {
-        this.path = path;
-    }
-
-    public ToParseFile getToParseFile()
-    {
-        return toParseFile;
-    }
-
-    public void setToParseFile(ToParseFile toParseFile)
-    {
-        this.toParseFile = toParseFile;
-    }
 }

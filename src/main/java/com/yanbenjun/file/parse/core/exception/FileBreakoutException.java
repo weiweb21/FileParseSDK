@@ -13,4 +13,12 @@ public class FileBreakoutException extends RowHandleException
      */
     private static final long serialVersionUID = -1583732573497130107L;
 
+    public FileBreakoutException() {
+
+    }
+
+    public FileBreakoutException(Exception e) {
+        super(e);
+    }
+
 }

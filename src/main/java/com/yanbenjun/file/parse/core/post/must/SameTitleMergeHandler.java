@@ -17,7 +17,7 @@ import com.yanbenjun.file.parse.core.exception.RowHandleException;
 import com.yanbenjun.file.parse.core.post.MidPostRowHandler;
 import com.yanbenjun.file.parse.core.post.infs.PostRowHandler;
 import com.yanbenjun.file.parse.message.CellParseMessage;
-import com.yanbenjun.file.parse.message.ParseMessage;
+import com.yanbenjun.file.parse.message.ParseContext;
 import com.yanbenjun.file.parse.message.RowParseMessage;
 import com.yanbenjun.file.parse.regist.type.TypeHorizontalMerger;
 import com.yanbenjun.file.parse.regist.type.TypeValidator;
@@ -40,7 +40,7 @@ public class SameTitleMergeHandler extends MidPostRowHandler
     }
 
     @Override
-    public void processOne(ParsedRow parsedRow, ParseMessage parseMessage) throws RowHandleException
+    public void processOne(ParsedRow parsedRow, ParseContext parseContext) throws RowHandleException
     {
         int sheetIndex = parsedRow.getSheetIndex();
         int rowIndex = parsedRow.getRowIndex();
@@ -57,7 +57,8 @@ public class SameTitleMergeHandler extends MidPostRowHandler
             map.get(ce.getTitle()).add(ce);
         }
         
-        Map<String,Object> mergeMap = new HashMap<String,Object>();
+        Map<String, Object> mergeMap = new HashMap<String, Object>();
+        RowParseMessage rowMsg = parseContext.getCurRowMsg();
         for(Entry<String, List<ColumnEntry>> entry : map.entrySet())
         {
             String title = entry.getKey();
@@ -72,7 +73,8 @@ public class SameTitleMergeHandler extends MidPostRowHandler
                 System.out.println(err);
                 ColumnEntry first = (ColumnEntry)entry.getValue().get(0);
                 int column = first.getKey();
-                ((RowParseMessage) parseMessage).add(new CellParseMessage(err, column, rowIndex, sheetIndex));
+                rowMsg.add(new CellParseMessage(err, column, rowIndex, sheetIndex));
+                // 更新行错误信息
                 return;
             }
             mergeMap.put(title, obj);
@@ -95,6 +97,6 @@ public class SameTitleMergeHandler extends MidPostRowHandler
                 hasSet.add(title);
             }
         }
-        next.processOne(parsedRow, parseMessage);
+        next.processOne(parsedRow, parseContext);
     }
 }

@@ -25,8 +25,6 @@ import com.yanbenjun.file.parse.core.exception.IllegalHeadException;
 import com.yanbenjun.file.parse.core.exception.SheetBreakoutException;
 import com.yanbenjun.file.parse.core.post.ParseStartHandler;
 import com.yanbenjun.file.parse.core.post.TeminationPostRowHandler;
-import com.yanbenjun.file.parse.message.HeadParseMessage;
-import com.yanbenjun.file.parse.message.ParseMessage;
 
 public class XlsxReader extends AbstractReader {
 
@@ -35,14 +33,13 @@ public class XlsxReader extends AbstractReader {
     @Override
     public void read(BaseParseFileInfo baseFileInfo, ParseStartHandler startHandler) throws ParseException {
         try {
-            String fileName = baseFileInfo.getPath();
             ToParseFile toParseFile = baseFileInfo.getToParseFile();
-            OPCPackage pkg = OPCPackage.open(fileName);
+            OPCPackage pkg = OPCPackage.open(baseFileInfo.getInputStream());
             XSSFReader r = new XSSFReader(pkg);
             SharedStringsTable sst = r.getSharedStringsTable();
 
             XMLReader parser = XMLReaderFactory.createXMLReader("com.sun.org.apache.xerces.internal.parsers.SAXParser");
-            XlsxSheetReadHandler handler = new XlsxSheetReadHandler(toParseFile, sst);
+            XlsxSheetReadHandler handler = new XlsxSheetReadHandler(toParseFile, sst, baseFileInfo.getParseContext());
             parser.setContentHandler(handler);
 
             if (!sortedRead) {
@@ -68,10 +65,9 @@ public class XlsxReader extends AbstractReader {
      * @throws InstantiationException
      * @throws Exception
      */
-    private ParseMessage parseWithPriority(ToParseFile toParseFile, XSSFReader r, XlsxSheetReadHandler handler,
+    private void parseWithPriority(ToParseFile toParseFile, XSSFReader r, XlsxSheetReadHandler handler,
             XMLReader parser, ParseStartHandler startHandler) throws InvalidFormatException, IOException,
             SAXException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-        HeadParseMessage hpMsg = new HeadParseMessage();
         for (ToParseTemplate template : toParseFile.getSortedTemplates()) {
             int sheetIndex = template.getSheetIndex();
             InputStream sheet = r.getSheet("rId" + (sheetIndex + 1));
@@ -79,9 +75,8 @@ public class XlsxReader extends AbstractReader {
             if (!toParseFile.needParse(sheetIndex)) {
                 continue;
             }
-            parseSheet(parser, sheet, handler, toParseFile, sheetIndex, hpMsg, startHandler);
+            parseSheet(parser, sheet, handler, toParseFile, sheetIndex, startHandler);
         }
-        return hpMsg;
     }
 
     /**
@@ -96,13 +91,12 @@ public class XlsxReader extends AbstractReader {
      * @throws ClassNotFoundException
      * @throws Exception
      */
-    private ParseMessage parseWithIndex(ToParseFile toParseFile, XSSFReader r, XlsxSheetReadHandler handler,
+    private void parseWithIndex(ToParseFile toParseFile, XSSFReader r, XlsxSheetReadHandler handler,
             XMLReader parser, ParseStartHandler startHandler) throws InvalidFormatException, IOException,
             SAXException, ClassNotFoundException, InstantiationException, IllegalAccessException {
 
         Iterator<InputStream> sheets = r.getSheetsData();
         int i = 0;
-        HeadParseMessage hpMsg = new HeadParseMessage();
         while (sheets.hasNext()) {
             int cur = i;
             i++;
@@ -112,13 +106,12 @@ public class XlsxReader extends AbstractReader {
             if (!toParseFile.needParse(cur)) {
                 continue;
             }
-            parseSheet(parser, sheet, handler, toParseFile, cur, hpMsg, startHandler);
+            parseSheet(parser, sheet, handler, toParseFile, cur, startHandler);
         }
-        return hpMsg;
     }
 
     private void parseSheet(XMLReader parser, InputStream sheet, XlsxSheetReadHandler handler, ToParseFile toParseFile,
-            int curSheetNo, HeadParseMessage hpMsg, ParseStartHandler outStartHandler)
+            int curSheetNo, ParseStartHandler outStartHandler)
             throws IOException, SAXException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         try {
             if (outStartHandler == null) {
@@ -136,7 +129,7 @@ public class XlsxReader extends AbstractReader {
             InputSource sheetSource = new InputSource(sheet);
             parser.parse(sheetSource);
         } catch (IllegalHeadException e) {
-            hpMsg.addAll(e.getHeadParseMessage().getErrorMsgs());
+            System.out.println("表头异常，从当前Sheet" + curSheetNo + "解析中跳出");
         } catch (SheetBreakoutException e) {
             System.out.println("从当前Sheet" + curSheetNo + "解析中跳出");
         } finally {

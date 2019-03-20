@@ -15,10 +15,12 @@ import com.yanbenjun.file.model.parse.ParsedRow;
 import com.yanbenjun.file.parse.core.ParseException;
 import com.yanbenjun.file.parse.core.Reader;
 import com.yanbenjun.file.parse.core.ReaderFactory;
+import com.yanbenjun.file.parse.core.exception.IllegalHeadException;
 import com.yanbenjun.file.parse.core.exception.RowHandleException;
 import com.yanbenjun.file.parse.core.post.infs.PostRowHandler;
-import com.yanbenjun.file.parse.message.HeadParseMessage;
-import com.yanbenjun.file.parse.message.ParseMessage;
+import com.yanbenjun.file.parse.message.CellParseMessage;
+import com.yanbenjun.file.parse.message.ParseContext;
+import com.yanbenjun.file.parse.message.RowParseMessage;
 
 public class FileParseExtractor implements ParseStartHandler
 {
@@ -32,7 +34,7 @@ public class FileParseExtractor implements ParseStartHandler
     @Override
     public void startParse(BaseParseFileInfo baseFileInfo) throws ParseException
     {
-        Reader reader = ReaderFactory.getReader(baseFileInfo.getPath());
+        Reader reader = ReaderFactory.getReader(baseFileInfo.getFileName());
         reader.read(baseFileInfo, null);
     }
 
@@ -40,51 +42,66 @@ public class FileParseExtractor implements ParseStartHandler
      * 后续可以引入对接参数，如某个Handler的对接上面是1，下路对接是3，则处理链上面只能是1结束的，处理链下端的只能是3开始的。
      */
     @Override
-    public void processOne(ParsedRow parsedRow, ParseMessage parseMessage) throws RowHandleException
+    public void processOne(ParsedRow parsedRow, ParseContext parseContext) throws RowHandleException
     {
         ToParseTemplate toParseTemplate = parsedRow.getCurTemplate();
+        int curRow = parsedRow.getRowIndex();
+        int headRow = toParseTemplate.getHeadRow();
+        int startContentRow = toParseTemplate.getStartContent();
         //为了兼容xml提取，xml提取rowIndex = -1，不会反在此返回
-        if(parsedRow.getRowIndex() >= 0 && parsedRow.getRowIndex() < toParseTemplate.getHeadRow())
+        if(curRow >= 0 && curRow < headRow)
         {
             return;
         }
         //为了兼容xml提取,xml提取rowIndex = -1，xml提取不进行表头提取，直接进行内容读取
-        if(toParseTemplate.getHeadRow() == parsedRow.getRowIndex())
+        if(curRow == headRow)
         {
+            RowParseMessage rowMsg = validateRow(parsedRow, parseContext);
+            if (rowMsg.isHasError()) {
+                throw new IllegalHeadException(rowMsg);
+            }
             readHead(parsedRow);
             return;
         }
-        Iterator<ColumnEntry> iter = parsedRow.getCells().iterator();
-        while(iter.hasNext())
-        {
-            ColumnEntry contentEntry = iter.next();
-            Integer columnIndex = contentEntry.getKey();
-            if(columnIndex == null)//xml提取没有列序号-列名称关系，直接跳过，避免在下一步数据被删除
-            {
-                continue;
-            }
-            if(parsedHeadMap.get(columnIndex) == null)
-            {
-                iter.remove();
-            }
-            else
-            {
-                contentEntry.setTitle(parsedHeadMap.get(columnIndex));
+        
+        if (curRow >= startContentRow) {
+            extractContent(parsedRow, parseContext);
+        }
+    }
+
+    private RowParseMessage validateRow(ParsedRow dataRow, ParseContext parseContext) {
+        ToParseTemplate toParseTemplate = dataRow.getCurTemplate();
+        RowParseMessage headParseMessage = parseContext.getHeadParseMessage();
+
+        if (toParseTemplate.getHeadRow() < 0) {
+            headParseMessage.setRowMsg("找不到对应的表头");
+            headParseMessage.setHasError(true);
+            return headParseMessage;
+        }
+        if (toParseTemplate.getHeadRow() == dataRow.getRowIndex()) {
+            List<String> keyHeads = toParseTemplate.getToParseHead().getColumnHeads().stream()
+                    .filter(ColumnHead::isRequired).map(ColumnHead::getTitleName).collect(Collectors.toList());
+            List<String> allDataHeads = dataRow.getCells().stream().map(Entry<Integer, String>::getValue)
+                    .collect(Collectors.toList());
+            for (String keyHead : keyHeads) {
+                if (!allDataHeads.contains(keyHead)) {
+                    System.out.println(dataRow.getSheetIndex() + "表头：“" + keyHead + "”必须包含。");
+                    CellParseMessage error = new CellParseMessage("表头：“" + keyHead + "”必须包含。", dataRow.getSheetIndex(),
+                            dataRow.getRowIndex());
+                    headParseMessage.add(error);
+                    headParseMessage.setHasError(true);
+                }
             }
         }
-        /*if(parsedRow.isEmpty())
-        {
-            return;
-        }*/
-        postHandler.processOne(parsedRow, parseMessage);
+        return headParseMessage;
     }
-    
+
     /**
      * 表头提取
      * @param parsedRow
      * @return
      */
-    protected HeadParseMessage readHead(ParsedRow parsedRow)
+    protected RowParseMessage readHead(ParsedRow parsedRow)
     {
         parsedHeadMap.clear();
         List<ColumnEntry> titles = parsedRow.getCells();
@@ -112,6 +129,32 @@ public class FileParseExtractor implements ParseStartHandler
             return null;
         }
         return null;
+    }
+
+
+
+    private void extractContent(ParsedRow parsedRow, ParseContext parseContext) {
+        Iterator<ColumnEntry> iter = parsedRow.getCells().iterator();
+        while (iter.hasNext()) {
+            ColumnEntry contentEntry = iter.next();
+            Integer columnIndex = contentEntry.getKey();
+            if (columnIndex == null)// xml提取没有列序号-列名称关系，直接跳过，避免在下一步数据被删除
+            {
+                continue;
+            }
+            if (parsedHeadMap.get(columnIndex) == null) {
+                iter.remove();
+            } else {
+                contentEntry.setTitle(parsedHeadMap.get(columnIndex));
+            }
+        }
+        /*
+         * if(parsedRow.isEmpty())
+         * {
+         * return;
+         * }
+         */
+        postHandler.processOne(parsedRow, parseContext);
     }
 
     @Override

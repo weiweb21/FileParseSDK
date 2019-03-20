@@ -1,6 +1,6 @@
 package com.yanbenjun.file.parse.core.exception;
 
-import com.yanbenjun.file.parse.message.HeadParseMessage;
+import com.yanbenjun.file.parse.message.RowParseMessage;
 
 /**
  * 表頭異常
@@ -9,7 +9,8 @@ import com.yanbenjun.file.parse.message.HeadParseMessage;
  */
 public class IllegalHeadException extends SheetBreakoutException
 {
-    private HeadParseMessage headParseMessage;
+
+    private RowParseMessage headParseMessage;
     /**
      * 
      */
@@ -20,15 +21,16 @@ public class IllegalHeadException extends SheetBreakoutException
         
     }
     
-    public IllegalHeadException(HeadParseMessage headParseMessage) {
+    public IllegalHeadException(RowParseMessage headParseMessage) {
         this.headParseMessage = headParseMessage;
     }
     
-    public HeadParseMessage getHeadParseMessage()
+    public RowParseMessage getRowParseMessage()
     {
         return headParseMessage;
     }
-    public void setHeadParseMessage(HeadParseMessage headParseMessage)
+
+    public void setRowParseMessage(RowParseMessage headParseMessage)
     {
         this.headParseMessage = headParseMessage;
     }

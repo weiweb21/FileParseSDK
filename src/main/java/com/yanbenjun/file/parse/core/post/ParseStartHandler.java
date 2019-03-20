@@ -11,7 +11,7 @@ public interface ParseStartHandler extends ParseStarter, PostRowHandler
 {
     public default void startParse(BaseParseFileInfo baseFileInfo) throws ParseException
     {
-        Reader reader = ReaderFactory.getReader(baseFileInfo.getPath());
+        Reader reader = ReaderFactory.getReader(baseFileInfo.getFileName());
         reader.read(baseFileInfo, this);
     }
 }

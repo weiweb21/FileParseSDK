@@ -15,7 +15,7 @@ import com.yanbenjun.file.model.parse.ColumnEntry;
 import com.yanbenjun.file.model.parse.ParsedRow;
 import com.yanbenjun.file.parse.core.exception.RowHandleException;
 import com.yanbenjun.file.parse.core.post.infs.PostRowHandler;
-import com.yanbenjun.file.parse.message.RowParseMessage;
+import com.yanbenjun.file.parse.message.ParseContext;
 
 /**
  * xml文件提取（提取成表格数据结构）
@@ -42,6 +42,8 @@ public class XmlHandler extends DefaultHandler
      */
     private List<XmlPositionInfo> xpInfos;
     private PostRowHandler startPostRowHandler;
+
+    private ParseContext parseContext;
 
     /**
      * 当前标签的内容
@@ -71,7 +73,8 @@ public class XmlHandler extends DefaultHandler
      */
     private List<String> noneValueKeys = new ArrayList<>();
 
-    public XmlHandler(String rowTag, ToParseFile toParseFile, PostRowHandler startPostRowHandler)
+    public XmlHandler(String rowTag, ToParseFile toParseFile, PostRowHandler startPostRowHandler,
+            ParseContext parseContext)
     {
         this.toParseFile = toParseFile;
         xpInfos = toParseFile.getTemplateWith(0).getToParseHead().getColumnHeads().stream().map(c -> {
@@ -161,7 +164,7 @@ public class XmlHandler extends DefaultHandler
     private void compute(ParsedRow parsedRow, boolean lastRow) throws RowHandleException
     {
         parsedRow.setCurTemplate(this.toParseFile.getTemplateWith(0));
-        startPostRowHandler.processOne(parsedRow, new RowParseMessage(0));
+        startPostRowHandler.processOne(parsedRow, parseContext);
     }
 
     public void endDocument() throws SAXException

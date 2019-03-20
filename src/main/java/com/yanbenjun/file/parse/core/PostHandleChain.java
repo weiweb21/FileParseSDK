@@ -12,7 +12,7 @@ import com.yanbenjun.file.parse.core.post.may.MapWrapHandler;
 import com.yanbenjun.file.parse.core.post.may.NormalPrinter;
 import com.yanbenjun.file.parse.core.post.must.SameTitleMergeHandler;
 import com.yanbenjun.file.parse.core.post.must.TypeConvertHandler;
-import com.yanbenjun.file.parse.message.ParseMessage;
+import com.yanbenjun.file.parse.message.ParseContext;
 
 public class PostHandleChain extends TeminationPostRowHandler
 {
@@ -83,8 +83,8 @@ public class PostHandleChain extends TeminationPostRowHandler
     }
 
     @Override
-    public void processOne(ParsedRow parsedRow, ParseMessage parseMessage) throws RowHandleException {
-        startHandler.processOne(parsedRow, parseMessage);
+    public void processOne(ParsedRow parsedRow, ParseContext parseContext) throws RowHandleException {
+        startHandler.processOne(parsedRow, parseContext);
     }
 
     public ParseStartHandler getStartHandler() {

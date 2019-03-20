@@ -5,13 +5,14 @@ import com.yanbenjun.file.parse.core.xml.XmlReader;
 
 public class ReaderFactory
 {
-    public static Reader getReader(String filePath)
+
+    public static Reader getReader(String fileName)
     {
-        if (filePath.endsWith(".xlsx"))
+        if (fileName.endsWith(".xlsx"))
         {
             return new XlsxReader();
         }
-        else if (filePath.endsWith(".xml"))
+        else if (fileName.endsWith(".xml"))
         {
             return new XmlReader();
         }

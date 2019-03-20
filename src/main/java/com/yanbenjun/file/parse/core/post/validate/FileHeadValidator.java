@@ -4,45 +4,37 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-import com.yanbenjun.file.config.element.BaseParseFileInfo;
 import com.yanbenjun.file.config.element.ColumnHead;
 import com.yanbenjun.file.config.element.ToParseTemplate;
-import com.yanbenjun.file.model.ErrorMessage;
 import com.yanbenjun.file.model.parse.ParsedRow;
-import com.yanbenjun.file.parse.core.ParseException;
-import com.yanbenjun.file.parse.core.Reader;
-import com.yanbenjun.file.parse.core.ReaderFactory;
 import com.yanbenjun.file.parse.core.exception.IllegalHeadException;
 import com.yanbenjun.file.parse.core.exception.RowHandleException;
 import com.yanbenjun.file.parse.core.exception.SheetBreakoutException;
+import com.yanbenjun.file.parse.core.post.MidPostRowHandler;
 import com.yanbenjun.file.parse.core.post.ParseStartHandler;
-import com.yanbenjun.file.parse.core.post.infs.PostRowHandler;
-import com.yanbenjun.file.parse.message.HeadParseMessage;
-import com.yanbenjun.file.parse.message.ParseMessage;
+import com.yanbenjun.file.parse.message.CellParseMessage;
+import com.yanbenjun.file.parse.message.ParseContext;
+import com.yanbenjun.file.parse.message.RowParseMessage;
 
-public class FileHeadValidator implements ParseStartHandler, HeadValidator {
+/**
+ * 
+ * @author yanbenjun
+ *
+ */
+@Deprecated
+public class FileHeadValidator extends MidPostRowHandler implements ParseStartHandler {
 
-    private BaseParseFileInfo baseFileInfo;
+    private RowParseMessage headParseMessage = new RowParseMessage();
 
-    private HeadParseMessage headParseMessage = new HeadParseMessage();
-
-    public FileHeadValidator(BaseParseFileInfo baseFileInfo) {
-        this.baseFileInfo = baseFileInfo;
+    public FileHeadValidator() {
     }
 
     @Override
-    public HeadParseMessage validate() throws ParseException {
-        Reader reader = ReaderFactory.getReader(baseFileInfo.getPath());
-        reader.read(baseFileInfo, this);
-        return headParseMessage;
-    }
-
-    @Override
-    public void processOne(ParsedRow parsedRow, ParseMessage parseMessage) throws RowHandleException {
-        HeadParseMessage hpMsg = validateRow(parsedRow, parseMessage);
+    public void processOne(ParsedRow parsedRow, ParseContext parseContext) throws RowHandleException {
+        RowParseMessage hpMsg = validateRow(parsedRow, parseContext);
         if (hpMsg.isHasError()) {
             headParseMessage.setHasError(true);
-            headParseMessage.addAll(hpMsg.getErrorMsgs());
+            headParseMessage.addAll(hpMsg.getCellParseMsgs());
             System.out.println("当前sheet页表头错误");
             throw new IllegalHeadException(hpMsg);
         }
@@ -54,15 +46,14 @@ public class FileHeadValidator implements ParseStartHandler, HeadValidator {
         }
     }
 
-    private HeadParseMessage validateRow(ParsedRow dataRow, ParseMessage parseMessage) {
+    private RowParseMessage validateRow(ParsedRow dataRow, ParseContext parseContext) {
         ToParseTemplate toParseTemplate = dataRow.getCurTemplate();
-        HeadParseMessage hpMsg = new HeadParseMessage();
+        RowParseMessage headParseMessage = parseContext.getHeadParseMessage();
 
         if (toParseTemplate.getHeadRow() < 0) {
-            ErrorMessage error = new ErrorMessage("找不到對應的表頭");
-            hpMsg.add(error);
-            hpMsg.setHasError(true);
-            return hpMsg;
+            headParseMessage.setRowMsg("找不到对应的表头");
+            headParseMessage.setHasError(true);
+            return headParseMessage;
         }
         if (toParseTemplate.getHeadRow() == dataRow.getRowIndex()) {
             List<String> keyHeads = toParseTemplate.getToParseHead().getColumnHeads().stream()
@@ -72,34 +63,14 @@ public class FileHeadValidator implements ParseStartHandler, HeadValidator {
             for (String keyHead : keyHeads) {
                 if (!allDataHeads.contains(keyHead)) {
                     System.out.println(dataRow.getSheetIndex() + "表头：“" + keyHead + "”必须包含。");
-                    ErrorMessage error = new ErrorMessage("表头：“" + keyHead + "”必须包含。", dataRow.getSheetIndex(),
+                    CellParseMessage error = new CellParseMessage("表头：“" + keyHead + "”必须包含。", dataRow.getSheetIndex(),
                             dataRow.getRowIndex());
-                    hpMsg.add(error);
-                    hpMsg.setHasError(true);
+                    headParseMessage.add(error);
+                    headParseMessage.setHasError(true);
                 }
             }
         }
-        return hpMsg;
-    }
-
-    /**
-     * 设置下一个行处理器，并返回该处理器
-     * 
-     * @param next
-     *            需要设置的行处理器
-     * @return 行处理器
-     */
-    public PostRowHandler next(PostRowHandler next) {
-        throw new UnsupportedOperationException("Temination PostRowHandler do not support next method.");
-    }
-
-    /**
-     * 返回下一个行处理器
-     * 
-     * @return
-     */
-    public PostRowHandler next() {
-        throw new UnsupportedOperationException("Temination PostRowHandler do not support next method.");
+        return headParseMessage;
     }
 
 }

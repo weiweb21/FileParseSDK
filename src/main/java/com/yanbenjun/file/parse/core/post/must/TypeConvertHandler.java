@@ -9,7 +9,7 @@ import com.yanbenjun.file.parse.core.exception.RowHandleException;
 import com.yanbenjun.file.parse.core.post.MidPostRowHandler;
 import com.yanbenjun.file.parse.core.post.infs.PostRowHandler;
 import com.yanbenjun.file.parse.message.CellParseMessage;
-import com.yanbenjun.file.parse.message.ParseMessage;
+import com.yanbenjun.file.parse.message.ParseContext;
 import com.yanbenjun.file.parse.message.RowParseMessage;
 import com.yanbenjun.file.parse.regist.type.TypeConvertor;
 import com.yanbenjun.file.parse.regist.type.TypeHandleException;
@@ -27,13 +27,13 @@ public class TypeConvertHandler extends MidPostRowHandler
     }
 
     @Override
-    public void processOne(ParsedRow parsedRow, ParseMessage parseMessage) throws RowHandleException
+    public void processOne(ParsedRow parsedRow, ParseContext parseContext) throws RowHandleException
     {
         int sheetIndex = parsedRow.getSheetIndex();
         int rowIndex = parsedRow.getRowIndex();
         ToParseTemplate toParseTemplate = parsedRow.getCurTemplate();
         List<ColumnEntry> cells = parsedRow.getCells();
-        RowParseMessage rowParseMessage = new RowParseMessage(sheetIndex);
+        RowParseMessage rowParseMessage = parseContext.getCurRowMsg();
         for(int i=0; i< cells.size(); i++)
         {
             ColumnEntry ce = cells.get(i);
@@ -52,6 +52,7 @@ public class TypeConvertHandler extends MidPostRowHandler
                 rowParseMessage.setHasError(true);
             }
         }
-        next.processOne(parsedRow, rowParseMessage);
+        // 往上下文中设置当前行解析信息
+        next.processOne(parsedRow, parseContext);
     }
 }

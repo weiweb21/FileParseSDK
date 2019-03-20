@@ -25,10 +25,10 @@ public class XmlReader implements Reader
 
             SAXParserFactory sParserFactory = SAXParserFactory.newInstance();
             SAXParser parser = sParserFactory.newSAXParser();
-            String fileName = xmlFileInfo.getPath();
             String tagName = xmlFileInfo.getRowTag();
-            XmlHandler handler = new XmlHandler(tagName, xmlFileInfo.getToParseFile(), startHandler);
-            parser.parse(fileName, handler);
+            XmlHandler handler = new XmlHandler(tagName, xmlFileInfo.getToParseFile(), startHandler,
+                    xmlFileInfo.getParseContext());
+            parser.parse(xmlFileInfo.getInputStream(), handler);
         }
         catch (ParserConfigurationException | SAXException |IOException e)
         {

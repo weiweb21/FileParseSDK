@@ -36,7 +36,7 @@ public class ToParseTemplate extends XElement implements XElementAddable
     private int sheetIndex;
     
     /**
-     * 第几个sheet页
+     * 业务处理器类全路径
      */
     @XmlAttribute(name = "postChain")
     private String postChain;

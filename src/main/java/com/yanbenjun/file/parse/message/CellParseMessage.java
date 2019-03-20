@@ -1,78 +1,52 @@
 package com.yanbenjun.file.parse.message;
 
-public class CellParseMessage extends ParseMessage
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class CellParseMessage extends Location implements IParseMessage
 {
-    private int columnIndex;
-    
-    private int rowIndex;
-    
-    private int sheetIndex;
-    
-    private int fileId;
-    
     private String msg;
     
-    public CellParseMessage(String msg, int columnIndex, int rowIndex, int sheetIndex)
+    public CellParseMessage() {
+
+    }
+
+    public CellParseMessage(String msg)
     {
         this.msg = msg;
-        this.columnIndex = columnIndex;
-        this.rowIndex = rowIndex;
-        this.sheetIndex = sheetIndex;
     }
 
-    public int getColumnIndex()
+    public CellParseMessage(String msg, int sheetId)
     {
-        return columnIndex;
+        this(msg, sheetId, -1);
     }
 
-    public void setColumnIndex(int columnIndex)
+    public CellParseMessage(String msg, int sheetId, int rowId)
     {
-        this.columnIndex = columnIndex;
+        this(msg, sheetId, rowId, -1);
     }
 
-    public int getRowIndex()
+    public CellParseMessage(String msg, int sheetId, int rowId, int columnId)
     {
-        return rowIndex;
-    }
-
-    public void setRowIndex(int rowIndex)
-    {
-        this.rowIndex = rowIndex;
-    }
-
-    public int getSheetIndex()
-    {
-        return sheetIndex;
-    }
-
-    public void setSheetIndex(int sheetIndex)
-    {
-        this.sheetIndex = sheetIndex;
-    }
-
-    public int getFileId()
-    {
-        return fileId;
-    }
-
-    public void setFileId(int fileId)
-    {
-        this.fileId = fileId;
-    }
-
-    public String getMsg()
-    {
-        return msg;
-    }
-
-    public void setMsg(String msg)
-    {
+        super(sheetId, rowId, columnId);
         this.msg = msg;
+    }
+
+    public String toString()
+    {
+        return "{" + super.toString() + ", msg: " + this.msg + "}";
     }
 
     @Override
     public boolean breakOut()
     {
+        return false;
+    }
+
+    @Override
+    public boolean isHasError() {
         return false;
     }
 }
