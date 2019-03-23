@@ -209,6 +209,7 @@
         <xs:attribute name="fieldName" type="xs:string"></xs:attribute>
         <xs:attribute name="required" type="xs:boolean" default="false"></xs:attribute>
         <xs:attribute name="type" type="xs:string" default="string"></xs:attribute>
+        <xs:attribute name="validator" type="xs:string" default="string"></xs:attribute>
         <xs:attribute name="horizontalMerger" type="xs:string"></xs:attribute>
         <xs:attribute name="xmlExtendInfo" type="xs:string"></xs:attribute>
     </xs:attributeGroup>

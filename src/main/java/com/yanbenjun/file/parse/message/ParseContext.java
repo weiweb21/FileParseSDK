@@ -31,10 +31,8 @@ public class ParseContext {
         context.putAll(params);
     }
 
-    public void clearMessage() {
-        curRowMsg.setHasError(false);
-        curRowMsg.setRowMsg(null);
-        curRowMsg.getCellParseMsgs().clear();
+    public void createRowMessage() {
+        curRowMsg = new RowParseMessage();
     }
 
     public RowParseMessage getHeadParseMessage() {

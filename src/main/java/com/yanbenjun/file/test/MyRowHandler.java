@@ -12,6 +12,7 @@ public class MyRowHandler extends TeminationPostRowHandler
     public void processOne(ParsedRow parsedRow, ParseContext parseContext) throws RowHandleException
     {
         System.out.println(parsedRow.getModelRow());
+        System.out.println(parseContext.getCurRowMsg().getCellParseMsgs());
     }
 
 }

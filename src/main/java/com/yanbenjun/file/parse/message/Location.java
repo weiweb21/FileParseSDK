@@ -1,5 +1,8 @@
 package com.yanbenjun.file.parse.message;
 
+import lombok.ToString;
+
+@ToString
 public class Location
 {
     private int fileId = -1;
@@ -70,9 +73,5 @@ public class Location
     public void setColumnId(int columnId)
     {
         this.columnId = columnId;
-    }
-    
-    public String toString() {
-        return "Location: ["+fileId+","+sheetId+","+rowId+", "+columnId+"]";
     }
 }

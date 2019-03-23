@@ -17,9 +17,14 @@ public class ColumnEntry implements Map.Entry<Integer, String>
     private Integer key;
     
     /**
-     * 数据属性名称
+     * 数据属性名称-view使用
      */
     private String title;
+    
+    /**
+     * 数据属性名称-Model使用
+     */
+    private String field;
 
     /**
      * 数据属性值
@@ -84,5 +89,15 @@ public class ColumnEntry implements Map.Entry<Integer, String>
     public void setModelValue(Object modelValue)
     {
         this.modelValue = modelValue;
+    }
+
+    public String getField()
+    {
+        return field;
+    }
+
+    public void setField(String field)
+    {
+        this.field = field;
     }
 }

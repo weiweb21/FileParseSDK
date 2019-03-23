@@ -1,6 +1,8 @@
 package com.yanbenjun.file.config.element;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -65,7 +67,7 @@ public abstract class XElement implements XElementAddable
                 {
                     continue;
                 }
-                setFieldValue(this, field, attr.getText());
+                setFieldValueBySetterMethod(this, field, attr.getText());
             }
         }
     }
@@ -74,7 +76,7 @@ public abstract class XElement implements XElementAddable
     {
         field.setAccessible(true);
         Class<?> type = field.getType();
-        if(type == String.class)
+        if(type == String.class && StringUtils.isNotBlank(value))
         {
             field.set(obj, value);
         }
@@ -93,6 +95,41 @@ public abstract class XElement implements XElementAddable
         else
         {
             throw new RuntimeException("不支持：" + type.getName() +"的属性");
+        }
+    }
+    
+    private void setFieldValueBySetterMethod(Object obj, Field field, String value)
+    {
+        try
+        {
+            String fieldName = field.getName();
+            String setterName = "set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1, fieldName.length());
+            Class<?> type = field.getType();
+            Method method = field.getDeclaringClass().getMethod(setterName, type);
+            if(type == String.class && StringUtils.isNotBlank(value))
+            {
+                method.invoke(obj, value);
+            }
+            else if(type == Integer.class || type == int.class)
+            {
+                method.invoke(obj, Integer.valueOf(value));
+            }
+            else if(type == Long.class || type == long.class)
+            {
+                method.invoke(obj, Long.valueOf(value));
+            }
+            else if(type == Boolean.class || type == boolean.class)
+            {
+                method.invoke(obj, value.equals("true") ? true : false);
+            }
+            else
+            {
+                throw new RuntimeException("不支持：" + type.getName() +"的属性");
+            }
+        }
+        catch (Exception e)
+        {
+            throw new ParseConfigurationException(e);
         }
     }
     

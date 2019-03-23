@@ -118,7 +118,7 @@ public class XlsxSheetReadHandler extends DefaultHandler {
         prow.setCells(dataRow);
         prow.setLastRow(lastRow);
 
-        parseContext.clearMessage();// 重新开始新的一行消息
+        parseContext.createRowMessage();// 重新开始新的一行消息
         startHandler.processOne(prow, parseContext);
     }
 

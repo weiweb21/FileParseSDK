@@ -50,34 +50,23 @@ public class SameTitleMergeHandler extends MidPostRowHandler
         for(int i=0; i< cells.size(); i++)
         {
             ColumnEntry ce = cells.get(i);
-            if(map.get(ce.getTitle()) == null)
+            if(map.get(ce.getField()) == null)
             {
-                map.put(ce.getTitle(), new ArrayList<ColumnEntry>());
+                map.put(ce.getField(), new ArrayList<ColumnEntry>());
             }
-            map.get(ce.getTitle()).add(ce);
+            map.get(ce.getField()).add(ce);
         }
         
         Map<String, Object> mergeMap = new HashMap<String, Object>();
         RowParseMessage rowMsg = parseContext.getCurRowMsg();
         for(Entry<String, List<ColumnEntry>> entry : map.entrySet())
         {
-            String title = entry.getKey();
+            String field = entry.getKey();
             List<ColumnEntry> ces = entry.getValue();
-            TypeHorizontalMerger<?> typeMerger = toParseTemplate.getTypeHorizontalMerger(title);
+            TypeHorizontalMerger<?> typeMerger = toParseTemplate.getTypeHorizontalMerger(field);
             List<Object> values = ces.stream().map(ColumnEntry::getModelValue).collect(Collectors.toList());
             Object obj = typeMerger.merge(values.toArray());
-            TypeValidator typeValidator = toParseTemplate.getTypeValidator(title);
-            String err = typeValidator.validate(obj);
-            if(err != null)
-            {
-                System.out.println(err);
-                ColumnEntry first = (ColumnEntry)entry.getValue().get(0);
-                int column = first.getKey();
-                rowMsg.add(new CellParseMessage(err, column, rowIndex, sheetIndex));
-                // 更新行错误信息
-                return;
-            }
-            mergeMap.put(title, obj);
+            mergeMap.put(field, obj);
         }
         
         //去重title，并将合并后的值设置进去
@@ -86,15 +75,15 @@ public class SameTitleMergeHandler extends MidPostRowHandler
         while(iter.hasNext())
         {
             ColumnEntry ce = iter.next();
-            String title = ce.getTitle();
-            ce.setModelValue(mergeMap.get(title));
-            if(hasSet.contains(title))
+            String field = ce.getField();
+            ce.setModelValue(mergeMap.get(field));
+            if(hasSet.contains(field))
             {
                 iter.remove();
             }
             else
             {
-                hasSet.add(title);
+                hasSet.add(field);
             }
         }
         next.processOne(parsedRow, parseContext);

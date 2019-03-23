@@ -29,7 +29,7 @@ public class MapWrapHandler extends MidPostRowHandler
     {
         ToParseTemplate toParseTemplate = parsedRow.getCurTemplate();
         Map<String, Object> modelRowMap = toParseTemplate.getFullFieldEmptyMap();
-        parsedRow.getCells().stream().forEach(ce->modelRowMap.put(ce.getTitle(), ce.getModelValue()));
+        parsedRow.getCells().stream().forEach(ce->modelRowMap.put(ce.getField(), ce.getModelValue()));
         parsedRow.setModelRow(modelRowMap);
         next.processOne(parsedRow, parseContext);
     }

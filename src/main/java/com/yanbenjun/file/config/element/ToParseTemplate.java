@@ -13,11 +13,11 @@ import com.yanbenjun.file.model.ToParserTemplateType;
 import com.yanbenjun.file.parse.regist.ToParserFileTypeRegister;
 import com.yanbenjun.file.parse.regist.TypeConvertorRegister;
 import com.yanbenjun.file.parse.regist.TypeHorizontalMergerRegister;
-import com.yanbenjun.file.parse.regist.TypeValidatorRegister;
 import com.yanbenjun.file.parse.regist.TypeVerticalMergerRegister;
+import com.yanbenjun.file.parse.regist.type.MultiCellValidator;
+import com.yanbenjun.file.parse.regist.type.SingleCellValidator;
 import com.yanbenjun.file.parse.regist.type.TypeConvertor;
 import com.yanbenjun.file.parse.regist.type.TypeHorizontalMerger;
-import com.yanbenjun.file.parse.regist.type.TypeValidator;
 import com.yanbenjun.file.parse.regist.type.TypeVerticalMerger;
 
 
@@ -36,7 +36,7 @@ public class ToParseTemplate extends XElement implements XElementAddable
     private int sheetIndex;
     
     /**
-     * 业务处理器类全路径
+     * 第几个sheet页
      */
     @XmlAttribute(name = "postChain")
     private String postChain;
@@ -73,6 +73,8 @@ public class ToParseTemplate extends XElement implements XElementAddable
     @XmlElement(name="columnHead", subElement=ColumnHead.class)
     @XmlElement(name="refColumn")
     private ToParseHead toParseHead;
+    
+    private List<MultiCellValidator> multiCellValidators;
     
     public String getType()
     {
@@ -181,27 +183,26 @@ public class ToParseTemplate extends XElement implements XElementAddable
         return toParseHead;
     }
 
-    public TypeConvertor<?> getTypeConvertor(String title)
+    public TypeConvertor<?> getTypeConvertor(String field)
     {
-        String convertorType = this.toParseHead.getByFieldName(title).getConvertorType();
+        String convertorType = this.toParseHead.getByFieldName(field).getConvertorType();
         return TypeConvertorRegister.singleton().getTypeConvertor(convertorType);
     }
     
-    public TypeValidator getTypeValidator(String title)
+    public List<SingleCellValidator> getSingleCellValidator(String field)
     {
-        String validatorType = this.toParseHead.getByFieldName(title).getValidatorType();
-        return TypeValidatorRegister.singleton().getTypeValidator(validatorType);
+        return this.toParseHead.getByFieldName(field).getSingleCellValidators();
     }
 
-    public TypeHorizontalMerger<?> getTypeHorizontalMerger(String title)
+    public TypeHorizontalMerger<?> getTypeHorizontalMerger(String field)
     {
-        String horizontalMergerType = this.toParseHead.getByFieldName(title).getHorizontalMergerType();
+        String horizontalMergerType = this.toParseHead.getByFieldName(field).getHorizontalMergerType();
         return TypeHorizontalMergerRegister.singleton().getTypeHorizontalMerger(horizontalMergerType);
     }
     
-    public TypeVerticalMerger<?> getTypeVerticalMerger(String title)
+    public TypeVerticalMerger<?> getTypeVerticalMerger(String field)
     {
-        String verticalMergerType = this.toParseHead.getByFieldName(title).getVerticalMergerType();
+        String verticalMergerType = this.toParseHead.getByFieldName(field).getVerticalMergerType();
         return TypeVerticalMergerRegister.singleton().getTypeVerticalMerger(verticalMergerType);
     }
     

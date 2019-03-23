@@ -12,6 +12,7 @@ import com.yanbenjun.file.parse.core.post.may.MapWrapHandler;
 import com.yanbenjun.file.parse.core.post.may.NormalPrinter;
 import com.yanbenjun.file.parse.core.post.must.SameTitleMergeHandler;
 import com.yanbenjun.file.parse.core.post.must.TypeConvertHandler;
+import com.yanbenjun.file.parse.core.post.must.TypeValidateHandler;
 import com.yanbenjun.file.parse.message.ParseContext;
 
 public class PostHandleChain extends TeminationPostRowHandler
@@ -47,7 +48,8 @@ public class PostHandleChain extends TeminationPostRowHandler
         SameTitleMergeHandler stmh = new SameTitleMergeHandler();
         stmh.next(efh).next(mwh).next(teminationHandler);
         TypeConvertHandler tch = new TypeConvertHandler(stmh);
-        FileParseExtractor extrator = new FileParseExtractor(tch);
+        TypeValidateHandler validateHandler = new TypeValidateHandler(tch);
+        FileParseExtractor extrator = new FileParseExtractor(validateHandler);
         return new PostHandleChain(extrator);
     }
 

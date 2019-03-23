@@ -1,6 +1,9 @@
 package com.yanbenjun.file.parse.regist;
 
+import com.yanbenjun.file.parse.regist.type.DoubleValidator;
+import com.yanbenjun.file.parse.regist.type.IntegerValidator;
 import com.yanbenjun.file.parse.regist.type.NoneValidator;
+import com.yanbenjun.file.parse.regist.type.NotNullValidator;
 import com.yanbenjun.file.parse.regist.type.TypeValidator;
 
 public class TypeValidatorRegister extends AbstractRegister
@@ -40,6 +43,9 @@ public class TypeValidatorRegister extends AbstractRegister
         static
         {
             singleton.regist(new NoneValidator());
+            singleton.regist(new NotNullValidator());
+            singleton.regist(new IntegerValidator());
+            singleton.regist(new DoubleValidator());
         }
     }
 

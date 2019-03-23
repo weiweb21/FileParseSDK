@@ -8,9 +8,7 @@ import com.yanbenjun.file.model.parse.ParsedRow;
 import com.yanbenjun.file.parse.core.exception.RowHandleException;
 import com.yanbenjun.file.parse.core.post.MidPostRowHandler;
 import com.yanbenjun.file.parse.core.post.infs.PostRowHandler;
-import com.yanbenjun.file.parse.message.CellParseMessage;
 import com.yanbenjun.file.parse.message.ParseContext;
-import com.yanbenjun.file.parse.message.RowParseMessage;
 import com.yanbenjun.file.parse.regist.type.TypeConvertor;
 import com.yanbenjun.file.parse.regist.type.TypeHandleException;
 
@@ -29,16 +27,13 @@ public class TypeConvertHandler extends MidPostRowHandler
     @Override
     public void processOne(ParsedRow parsedRow, ParseContext parseContext) throws RowHandleException
     {
-        int sheetIndex = parsedRow.getSheetIndex();
-        int rowIndex = parsedRow.getRowIndex();
         ToParseTemplate toParseTemplate = parsedRow.getCurTemplate();
         List<ColumnEntry> cells = parsedRow.getCells();
-        RowParseMessage rowParseMessage = parseContext.getCurRowMsg();
         for(int i=0; i< cells.size(); i++)
         {
             ColumnEntry ce = cells.get(i);
-            String title = ce.getTitle();
-            TypeConvertor<?> typeConvertor = toParseTemplate.getTypeConvertor(title);
+            String field = ce.getField();
+            TypeConvertor<?> typeConvertor = toParseTemplate.getTypeConvertor(field);
             try
             {
                 Object obj = typeConvertor.convert(ce.getValue());
@@ -46,10 +41,11 @@ public class TypeConvertHandler extends MidPostRowHandler
             }
             catch (TypeHandleException e)
             {
-                String errorMsg = e.getErrorInfo();
+                //TODO LOG
+                /*String errorMsg = e.getErrorInfo();
                 CellParseMessage cpm = new CellParseMessage(errorMsg, ce.getKey(), rowIndex, sheetIndex);
                 rowParseMessage.add(cpm);
-                rowParseMessage.setHasError(true);
+                rowParseMessage.setHasError(true);*/
             }
         }
         // 往上下文中设置当前行解析信息

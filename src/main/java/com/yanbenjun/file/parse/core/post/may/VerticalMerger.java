@@ -40,7 +40,7 @@ public class VerticalMerger extends MidPostRowHandler
         String primaryKey = toParseTemplate.getPrimaryKey();
         List<ColumnEntry> cells = parsedRow.getCells();
         StringBuffer sb = new StringBuffer();
-        cells.stream().filter(ce->primaryKey.contains(ce.getTitle())).forEach(ce->sb.append(ce.getModelValue().toString()));
+        cells.stream().filter(ce->primaryKey.contains(ce.getField())).forEach(ce->sb.append(ce.getModelValue().toString()));
         String thisKeyValue = sb.toString();
 
         if (StringUtils.isEmpty(thisKeyValue) || StringUtils.equals(lastKeyValue, thisKeyValue) || lastModelRowMap.isEmpty())
@@ -85,12 +85,12 @@ public class VerticalMerger extends MidPostRowHandler
         for (int i = 0; i < cells.size(); i++)
         {
             ColumnEntry ce = cells.get(i);
-            String title = ce.getTitle();
-            if(lastModelRowMap.get(title) == null)
+            String field = ce.getField();
+            if(lastModelRowMap.get(field) == null)
             {
-                lastModelRowMap.put(title, new ArrayList<Object>());
+                lastModelRowMap.put(field, new ArrayList<Object>());
             }
-            lastModelRowMap.get(title).add(ce.getModelValue());
+            lastModelRowMap.get(field).add(ce.getModelValue());
             //lastModelRowMap.computeIfAbsent(title, k -> new ArrayList<Object>()).add(ce.getModelValue());
         }
         

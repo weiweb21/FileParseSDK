@@ -2,13 +2,23 @@ package com.yanbenjun.file.parse.message;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 public class CellParseMessage extends Location implements IParseMessage
 {
     private String msg;
     
+    private String cellOriginValue;
+    
+    private String field;
+
+    private String title;
+
+    private String msgType;
+
     public CellParseMessage() {
 
     }
@@ -32,11 +42,6 @@ public class CellParseMessage extends Location implements IParseMessage
     {
         super(sheetId, rowId, columnId);
         this.msg = msg;
-    }
-
-    public String toString()
-    {
-        return "{" + super.toString() + ", msg: " + this.msg + "}";
     }
 
     @Override

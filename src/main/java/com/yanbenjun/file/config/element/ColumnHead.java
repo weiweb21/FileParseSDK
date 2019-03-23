@@ -1,9 +1,14 @@
 package com.yanbenjun.file.config.element;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.yanbenjun.file.parse.regist.type.FirstNoneEmptyMerger;
 import com.yanbenjun.file.parse.regist.type.NoneValidator;
+import com.yanbenjun.file.parse.regist.type.SingleCellValidator;
 import com.yanbenjun.file.parse.regist.type.StringConvertor;
 import com.yanbenjun.file.parse.regist.type.StringJoinMerger;
+import com.yanbenjun.file.parse.regist.validator.factory.SingleCellValidatorFactory;
 
 /**
  * 
@@ -38,8 +43,10 @@ public class ColumnHead extends XElement
     
     private String verticalMergerType = FirstNoneEmptyMerger.REGIST_KEY;
     
+    @XmlAttribute(name="validator")
     private String validatorType = NoneValidator.REGIST_KEY;
     
+    private List<SingleCellValidator> singleCellValidators = new ArrayList<>();
     /**
      * 擴展信息
      */
@@ -62,7 +69,7 @@ public class ColumnHead extends XElement
         this.fieldName = fieldName;
         this.required = required;
     }
-
+    
     public String getTitleName()
     {
         return titleName;
@@ -149,6 +156,7 @@ public class ColumnHead extends XElement
     public ColumnHead setValidatorType(String validatorType)
     {
         this.validatorType = validatorType;
+        this.singleCellValidators.addAll(SingleCellValidatorFactory.getSingleCellValidators(validatorType));
         return this;
     }
 
@@ -167,5 +175,14 @@ public class ColumnHead extends XElement
     {
         // TODO Auto-generated method stub
         
+    }
+
+    public List<SingleCellValidator> getSingleCellValidators()
+    {
+        return singleCellValidators;
+    }
+    
+    public void add(SingleCellValidator cellValidator) {
+        singleCellValidators.add(cellValidator);
     }
 }

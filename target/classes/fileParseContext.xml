@@ -41,11 +41,28 @@
 	                <columnHead titleName="空调品牌" fieldName="ac_brand" required="true"
 	                    type="string" />
 	                <columnHead titleName="空调型号" fieldName="ac_model_no" required="true"
-	                    type="string" />
+	                    type="string" validator="notnull"/>
 	                <columnHead titleName="空调功率" fieldName="ac_power" required="true"
 	                    type="string" />
 	                <columnHead titleName="所属机房" fieldName="room_id" required="true"
 	                    type="string" />
+                </toParseTemplate>
+			</toParseFile>
+		</parsePoint>
+
+        <!-- 解析点，具体的业务系统，哪里需要解析文件，只需要在请求中传入该解析点ID，就可以自动根据解析点的配置，自动解析入库 -->
+		<parsePoint id="20190323">
+			<toParseFile name="room" mode="single">
+				<toParseTemplate name="powerRoom" sheetIndex="0" postChain="com.yanbenjun.file.test.MyRowHandler">
+	                <columnHead titleName="机房名称" fieldName="room_name" required="true"
+	                    type="string" validator="notnull"/>
+	                <columnHead titleName="机房位置" fieldName="room_address" required="true"
+	                    type="string" />
+	                <columnHead titleName="经度" fieldName="longitude" required="true"
+	                    type="double" validator="notnull|double"/>
+	                <columnHead titleName="纬度" fieldName="latitude" required="true"
+	                    type="double"  validator="notnull|double"/>
+	                <columnHead titleName="所属县|区" fieldName="area_id" type="string" validator="notnull|enum(expression:深圳=1,广州=2)"/>
                 </toParseTemplate>
 			</toParseFile>
 		</parsePoint>
