@@ -1,10 +1,17 @@
 package com.yanbenjun.file.parse.regist.type;
 
-import com.yanbenjun.file.parse.regist.ICanRegist;
+public interface SingleCellValidator extends Validator {
 
-public interface SingleCellValidator extends ICanRegist {
-
+    /**
+     * 校验Field的值是否符合条件
+     * @param value 需要校验的值
+     * @return true=不通过，=通过
+     */
     public boolean validate(String value);
 
+    /**
+     * 校验完毕获取错误信息
+     * @return
+     */
     public String getErrorMsg();
 }

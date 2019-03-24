@@ -16,11 +16,9 @@ import com.yanbenjun.file.model.parse.ParsedRow;
 import com.yanbenjun.file.parse.core.exception.RowHandleException;
 import com.yanbenjun.file.parse.core.post.MidPostRowHandler;
 import com.yanbenjun.file.parse.core.post.infs.PostRowHandler;
-import com.yanbenjun.file.parse.message.CellParseMessage;
 import com.yanbenjun.file.parse.message.ParseContext;
 import com.yanbenjun.file.parse.message.RowParseMessage;
 import com.yanbenjun.file.parse.regist.type.TypeHorizontalMerger;
-import com.yanbenjun.file.parse.regist.type.TypeValidator;
 
 /**
  * 相同列关键词（表头）的内容合并处理器

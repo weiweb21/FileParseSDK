@@ -9,13 +9,15 @@ import com.yanbenjun.file.parse.regist.type.SingleCellValidator;
 import com.yanbenjun.file.parse.regist.type.TypeHandleException;
 import com.yanbenjun.file.parse.regist.validator.EnumDataSourceFactory;
 
-public class EnumCellValidatorFactory implements SingleCellValidatorFactory {
-
+public class EnumCellValidatorFactory extends AbstractValidatorFactory {
+    public EnumCellValidatorFactory(String enumExpression) {
+        super(enumExpression);
+    }
+    
     @Override
-    public SingleCellValidator newSingleCellValidator(String vstr) {
-
+    public SingleCellValidator newValidator() {
         EnumValidator enumValidator = new EnumValidator();
-        String[] sarr = getParamExpression(vstr);
+        String[] sarr = getParamExpression(validatorExpression);
         Map<String, Object> keyvalueMap = EnumDataSourceFactory.getEnumDataSource(sarr[0].trim())
                 .getKeyvalueMap(sarr[1].trim());
         enumValidator.putAll(keyvalueMap);

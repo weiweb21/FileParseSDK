@@ -4,18 +4,18 @@ import com.yanbenjun.file.parse.regist.type.DoubleValidator;
 import com.yanbenjun.file.parse.regist.type.IntegerValidator;
 import com.yanbenjun.file.parse.regist.type.NoneValidator;
 import com.yanbenjun.file.parse.regist.type.NotNullValidator;
-import com.yanbenjun.file.parse.regist.type.TypeValidator;
+import com.yanbenjun.file.parse.regist.type.SingleCellValidator;
 
 public class TypeValidatorRegister extends AbstractRegister
 {
-    public TypeValidator getTypeValidator(String typeName)
+    public SingleCellValidator getTypeValidator(String typeName)
     {
         ICanRegist cr = super.getObject(typeName.trim());
         if(cr == null)
         {
             throw new RuntimeException("没有注册与类型：“" + typeName + "”对应的类型校验器");
         }
-        return (TypeValidator)cr;
+        return (SingleCellValidator)cr;
     }
     
     @Override
