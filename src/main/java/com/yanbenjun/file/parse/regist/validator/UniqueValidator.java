@@ -6,6 +6,11 @@ import java.util.Map;
 
 import com.yanbenjun.file.util.MapUtils;
 
+/**
+ * TODO
+ * @author Administrator
+ *
+ */
 public class UniqueValidator implements MultiCellValidator
 {
     public static final String REGIST_KEY = "unique";

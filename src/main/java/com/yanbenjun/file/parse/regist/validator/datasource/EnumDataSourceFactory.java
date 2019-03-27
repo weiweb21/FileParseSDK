@@ -15,12 +15,17 @@ public class EnumDataSourceFactory {
         return null;
     }
     
-    private static DbEnumDataSource parse(String queryEnumParam) {
+    private static EnumDataSource parse(String queryEnumParam) {
         try
         {
-            @SuppressWarnings("unchecked")
-            Class<? extends DbEnumDataSource> clazz = (Class<? extends DbEnumDataSource>) Class.forName(queryEnumParam);
-            return clazz.newInstance();
+            Class<?> clazz =  Class.forName(queryEnumParam);
+            if (DbEnumDataSource.class.isAssignableFrom(clazz)) {
+                return clazz.asSubclass(DbEnumDataSource.class).newInstance();
+            } else if (clazz.isEnum()) {
+                return new EnumClassEnumDataSource(queryEnumParam);
+            } else {
+                throw new RuntimeException("枚举表达式格式异常, 找不到正确的数据库枚举数据源:" + queryEnumParam);
+            }
         }
         catch (Exception e)
         {
