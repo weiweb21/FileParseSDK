@@ -64,6 +64,13 @@ public class XlsxSheetReadHandler extends DefaultHandler {
         if (name.equals("c")) {
             r = attributes.getValue("r");
             setPosition(r);
+            if (newLine) {
+                try {
+                    compute(dataRow, false);
+                } finally {
+                    dataRow.clear();// 抛出任何行操作异常，均情况行数据缓存，否则会有垃圾数据
+                }
+            }
             // Figure out if the value is an index in the SST
             String cellType = attributes.getValue("t");
             if (cellType != null && cellType.equals("s")) {
@@ -88,13 +95,6 @@ public class XlsxSheetReadHandler extends DefaultHandler {
         // v => contents of a cell
         // Output after we've seen the string contents
         if (name.equals("v")) {
-            if (newLine) {
-                try {
-                    compute(dataRow, false);
-                } finally {
-                    dataRow.clear();// 抛出任何行操作异常，均情况行数据缓存，否则会有垃圾数据
-                }
-            }
             dataRow.add(new ColumnEntry(this.column, lastContents));
         }
     }

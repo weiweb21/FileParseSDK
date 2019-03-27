@@ -9,6 +9,7 @@ public class LocalFileParseTest
 {
     public static void main(String[] args)
     {
+        System.out.println(LocalFileParseTest.class.getClassLoader());
         ParseSystemContext psc = new ParseSystemContext("fileParseContext.xml");
         FileParser fp = FileParserFactory.getFileParser("F://test.xlsx", 20190323L);
         try

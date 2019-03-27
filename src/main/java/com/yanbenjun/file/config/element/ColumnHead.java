@@ -8,7 +8,7 @@ import com.yanbenjun.file.parse.regist.type.NoneValidator;
 import com.yanbenjun.file.parse.regist.type.SingleCellValidator;
 import com.yanbenjun.file.parse.regist.type.StringConvertor;
 import com.yanbenjun.file.parse.regist.type.StringJoinMerger;
-import com.yanbenjun.file.parse.regist.validator.factory.ValidatorFactory;
+import com.yanbenjun.file.parse.regist.validator.factory.SingleCellValidatorFactory;
 
 /**
  * 
@@ -156,7 +156,6 @@ public class ColumnHead extends XElement
     public ColumnHead setValidatorType(String validatorType)
     {
         this.validatorType = validatorType;
-        this.singleCellValidators.addAll(ValidatorFactory.getSingleCellValidators(validatorType));
         return this;
     }
 
@@ -179,6 +178,8 @@ public class ColumnHead extends XElement
 
     public List<SingleCellValidator> getSingleCellValidators()
     {
+        this.singleCellValidators = SingleCellValidatorFactory.getSingleCellValidators(validatorType);
+
         return singleCellValidators;
     }
     

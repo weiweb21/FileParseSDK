@@ -11,7 +11,7 @@ public class UniqueValidatorFactory extends AbstractValidatorFactory {
     @Override
     public UniqueValidator newValidator()
     {
-        UniqueValidator uv =  new UniqueValidator();
+        UniqueValidator uv =  new UniqueValidator(validatorExpression);
         uv.init();
         return uv;
     }
