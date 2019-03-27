@@ -9,9 +9,10 @@ import com.yanbenjun.file.parse.core.exception.RowHandleException;
 import com.yanbenjun.file.parse.core.post.MidPostRowHandler;
 import com.yanbenjun.file.parse.core.post.infs.PostRowHandler;
 import com.yanbenjun.file.parse.message.ParseContext;
-import com.yanbenjun.file.parse.regist.type.TypeConvertor;
-import com.yanbenjun.file.parse.regist.type.TypeHandleException;
+import com.yanbenjun.file.parse.regist.TypeHandleException;
+import com.yanbenjun.file.parse.regist.convertor.TypeConvertor;
 
+@Deprecated
 public class TypeConvertHandler extends MidPostRowHandler
 {
     public TypeConvertHandler()

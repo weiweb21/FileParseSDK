@@ -1,12 +1,12 @@
 package com.yanbenjun.file.parse.regist;
 
-import com.yanbenjun.file.parse.regist.type.DoubleAddMerger;
-import com.yanbenjun.file.parse.regist.type.FirstNoneEmptyMerger;
-import com.yanbenjun.file.parse.regist.type.IntegerAddMerger;
-import com.yanbenjun.file.parse.regist.type.ListCollectionMerger;
-import com.yanbenjun.file.parse.regist.type.StringConvertor;
-import com.yanbenjun.file.parse.regist.type.StringJoinMerger;
-import com.yanbenjun.file.parse.regist.type.TypeVerticalMerger;
+import com.yanbenjun.file.parse.regist.convertor.StringConvertor;
+import com.yanbenjun.file.parse.regist.merger.DoubleAddMerger;
+import com.yanbenjun.file.parse.regist.merger.FirstNoneEmptyMerger;
+import com.yanbenjun.file.parse.regist.merger.IntegerAddMerger;
+import com.yanbenjun.file.parse.regist.merger.ListCollectionMerger;
+import com.yanbenjun.file.parse.regist.merger.StringJoinMerger;
+import com.yanbenjun.file.parse.regist.merger.TypeVerticalMerger;
 
 public class TypeVerticalMergerRegister extends AbstractRegister
 {

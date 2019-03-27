@@ -3,7 +3,7 @@ package com.yanbenjun.file.parse.regist.validator.factory;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.yanbenjun.file.parse.regist.type.SingleCellValidator;
+import com.yanbenjun.file.parse.regist.validator.SingleCellValidator;
 
 public interface SingleCellValidatorFactory
 {

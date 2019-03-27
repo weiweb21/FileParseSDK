@@ -1,10 +1,10 @@
 package com.yanbenjun.file.parse.regist;
 
-import com.yanbenjun.file.parse.regist.type.DoubleValidator;
-import com.yanbenjun.file.parse.regist.type.IntegerValidator;
-import com.yanbenjun.file.parse.regist.type.NoneValidator;
-import com.yanbenjun.file.parse.regist.type.NotNullValidator;
-import com.yanbenjun.file.parse.regist.type.SingleCellValidator;
+import com.yanbenjun.file.parse.regist.validator.DoubleValidator;
+import com.yanbenjun.file.parse.regist.validator.IntegerValidator;
+import com.yanbenjun.file.parse.regist.validator.NoneValidator;
+import com.yanbenjun.file.parse.regist.validator.NotNullValidator;
+import com.yanbenjun.file.parse.regist.validator.SingleCellValidator;
 
 public class TypeValidatorRegister extends AbstractRegister
 {

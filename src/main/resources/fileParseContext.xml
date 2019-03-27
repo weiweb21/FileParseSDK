@@ -62,7 +62,7 @@
 	                    type="double" validator="notnull|double"/>
 	                <columnHead titleName="纬度" fieldName="latitude" required="true"
 	                    type="double"  validator="notnull|double"/>
-	                <columnHead titleName="所属县|区" fieldName="area_id" type="string" validator="notnull|enum(expression:深圳=1,广州=2)"/>
+	                <columnHead titleName="所属县|区" fieldName="area_id" type="string" validator="notnull|enum(query, com.yanbenjun.file.test.MyTestDbEnumDataSource)"/>
                 </toParseTemplate>
 			</toParseFile>
 		</parsePoint>

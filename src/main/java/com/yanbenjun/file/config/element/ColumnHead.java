@@ -3,11 +3,11 @@ package com.yanbenjun.file.config.element;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.yanbenjun.file.parse.regist.type.FirstNoneEmptyMerger;
-import com.yanbenjun.file.parse.regist.type.NoneValidator;
-import com.yanbenjun.file.parse.regist.type.SingleCellValidator;
-import com.yanbenjun.file.parse.regist.type.StringConvertor;
-import com.yanbenjun.file.parse.regist.type.StringJoinMerger;
+import com.yanbenjun.file.parse.regist.convertor.StringConvertor;
+import com.yanbenjun.file.parse.regist.merger.FirstNoneEmptyMerger;
+import com.yanbenjun.file.parse.regist.merger.StringJoinMerger;
+import com.yanbenjun.file.parse.regist.validator.NoneValidator;
+import com.yanbenjun.file.parse.regist.validator.SingleCellValidator;
 import com.yanbenjun.file.parse.regist.validator.factory.SingleCellValidatorFactory;
 
 /**

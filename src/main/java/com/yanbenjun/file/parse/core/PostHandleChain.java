@@ -11,7 +11,6 @@ import com.yanbenjun.file.parse.core.post.may.ExcludeFiltHandler;
 import com.yanbenjun.file.parse.core.post.may.MapWrapHandler;
 import com.yanbenjun.file.parse.core.post.may.NormalPrinter;
 import com.yanbenjun.file.parse.core.post.must.SameTitleMergeHandler;
-import com.yanbenjun.file.parse.core.post.must.TypeConvertHandler;
 import com.yanbenjun.file.parse.core.post.must.TypeValidateHandler;
 import com.yanbenjun.file.parse.message.ParseContext;
 
@@ -27,28 +26,22 @@ public class PostHandleChain extends TeminationPostRowHandler
     public static PostHandleChain getPrinterChain()
     {
         NormalPrinter np = new NormalPrinter();
-        MapWrapHandler mwh = new MapWrapHandler();
-        ExcludeFiltHandler efh = new ExcludeFiltHandler();
-        SameTitleMergeHandler stmh = new SameTitleMergeHandler();
-        stmh.next(efh).next(mwh).next(np);
-        TypeConvertHandler tch = new TypeConvertHandler(stmh);
-
-        FileParseExtractor extrator = new FileParseExtractor(tch);
-        return new PostHandleChain(extrator);
+        return getBuildinChain(np);
     }
 
     public static PostHandleChain getBuildinChain(
-            Class<? extends TeminationPostRowHandler> TeminationPostRowHandlerClazz)
+            Class<? extends TeminationPostRowHandler> teminationPostRowHandlerClazz)
             throws InstantiationException, IllegalAccessException
     {
-        TeminationPostRowHandler teminationHandler;
-        teminationHandler = TeminationPostRowHandlerClazz.newInstance();
-        MapWrapHandler mwh = new MapWrapHandler();
-        ExcludeFiltHandler efh = new ExcludeFiltHandler();
-        SameTitleMergeHandler stmh = new SameTitleMergeHandler();
-        stmh.next(efh).next(mwh).next(teminationHandler);
-        TypeConvertHandler tch = new TypeConvertHandler(stmh);
-        TypeValidateHandler validateHandler = new TypeValidateHandler(tch);
+        TeminationPostRowHandler teminationHandler = teminationPostRowHandlerClazz.newInstance();
+        return getBuildinChain(teminationHandler);
+    }
+    
+    public static PostHandleChain getBuildinChain(TeminationPostRowHandler teminationPostRowHandler) {
+        MapWrapHandler mwh = new MapWrapHandler(teminationPostRowHandler);
+        ExcludeFiltHandler efh = new ExcludeFiltHandler(mwh);
+        SameTitleMergeHandler stmh = new SameTitleMergeHandler(efh);
+        TypeValidateHandler validateHandler = new TypeValidateHandler(stmh);
         FileParseExtractor extrator = new FileParseExtractor(validateHandler);
         return new PostHandleChain(extrator);
     }

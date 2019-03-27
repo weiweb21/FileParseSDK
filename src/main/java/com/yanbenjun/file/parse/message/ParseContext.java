@@ -10,6 +10,8 @@ public class ParseContext {
     private RowParseMessage curRowMsg = new RowParseMessage();
 
     private RowParseMessage headParseMessage = new RowParseMessage();
+    
+    private Map<Integer, String> columnFieldMap = new HashMap<>();
 
     public String getString(String key) {
         return (String) context.get(key);
@@ -41,5 +43,20 @@ public class ParseContext {
 
     public RowParseMessage getCurRowMsg() {
         return curRowMsg;
+    }
+
+    public Map<Integer, String> getExistColumnFieldMap()
+    {
+        return this.columnFieldMap;
+    }
+    
+    public void putCurExistColumns(Map<Integer, String> map)
+    {
+        this.columnFieldMap.putAll(map);;
+    }
+    
+    public void clearCurExistColumns()
+    {
+        this.columnFieldMap.clear();
     }
 }

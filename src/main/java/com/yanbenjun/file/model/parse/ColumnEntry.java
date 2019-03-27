@@ -1,7 +1,5 @@
 package com.yanbenjun.file.model.parse;
 
-import java.util.Map;
-
 import com.alibaba.fastjson.JSON;
 
 /**
@@ -9,7 +7,7 @@ import com.alibaba.fastjson.JSON;
  * @author Administrator
  *
  */
-public class ColumnEntry implements Map.Entry<Integer, String>
+public class ColumnEntry
 {
     /**
      * xlsx,xls 第key列
@@ -48,19 +46,16 @@ public class ColumnEntry implements Map.Entry<Integer, String>
         this.value = lastContents;
     }
 
-    @Override
     public Integer getKey()
     {
         return key;
     }
 
-    @Override
     public String getValue()
     {
         return value;
     }
 
-    @Override
     public String setValue(String value)
     {
         return this.value = value;

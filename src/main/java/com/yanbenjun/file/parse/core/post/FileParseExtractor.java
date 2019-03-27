@@ -88,7 +88,7 @@ public class FileParseExtractor implements ParseStartHandler
         {
             List<String> keyHeads = toParseTemplate.getToParseHead().getColumnHeads().stream()
                     .filter(ColumnHead::isRequired).map(ColumnHead::getTitleName).collect(Collectors.toList());
-            List<String> allDataHeads = dataRow.getCells().stream().map(Entry<Integer, String>::getValue)
+            List<String> allDataHeads = dataRow.getCells().stream().map(ColumnEntry::getValue)
                     .collect(Collectors.toList());
             for (String keyHead : keyHeads)
             {
@@ -125,7 +125,7 @@ public class FileParseExtractor implements ParseStartHandler
         List<String> templateHeads = toParseTemplate.getToParseHead().getColumnHeads().stream()
                 .map(ColumnHead::getTitleName).collect(Collectors.toList());
 
-        for (Entry<Integer, String> titleEntry : parsedRow.getCells())
+        for (ColumnEntry titleEntry : parsedRow.getCells())
         {
             if (templateHeads.contains(titleEntry.getValue()))
             {
@@ -180,6 +180,10 @@ public class FileParseExtractor implements ParseStartHandler
                 parsedRow.getCells().add(entry.getKey(),ce);
             }
         }
+        
+        //将Excel中存在的表头放入上下文
+        parseContext.clearCurExistColumns();
+        parseContext.putCurExistColumns(columnFieldMap);
 
         /*
          * if(parsedRow.isEmpty()) { return; }

@@ -1,11 +1,11 @@
 package com.yanbenjun.file.parse.core.post.validate;
 
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import com.yanbenjun.file.config.element.ColumnHead;
 import com.yanbenjun.file.config.element.ToParseTemplate;
+import com.yanbenjun.file.model.parse.ColumnEntry;
 import com.yanbenjun.file.model.parse.ParsedRow;
 import com.yanbenjun.file.parse.core.exception.IllegalHeadException;
 import com.yanbenjun.file.parse.core.exception.RowHandleException;
@@ -58,7 +58,7 @@ public class FileHeadValidator extends MidPostRowHandler implements ParseStartHa
         if (toParseTemplate.getHeadRow() == dataRow.getRowIndex()) {
             List<String> keyHeads = toParseTemplate.getToParseHead().getColumnHeads().stream()
                     .filter(ColumnHead::isRequired).map(ColumnHead::getTitleName).collect(Collectors.toList());
-            List<String> allDataHeads = dataRow.getCells().stream().map(Entry<Integer, String>::getValue)
+            List<String> allDataHeads = dataRow.getCells().stream().map(ColumnEntry::getValue)
                     .collect(Collectors.toList());
             for (String keyHead : keyHeads) {
                 if (!allDataHeads.contains(keyHead)) {

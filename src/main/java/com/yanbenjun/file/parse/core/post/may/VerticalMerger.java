@@ -2,9 +2,11 @@ package com.yanbenjun.file.parse.core.post.may;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -16,7 +18,7 @@ import com.yanbenjun.file.parse.core.exception.RowHandleException;
 import com.yanbenjun.file.parse.core.post.MidPostRowHandler;
 import com.yanbenjun.file.parse.core.post.infs.PostRowHandler;
 import com.yanbenjun.file.parse.message.ParseContext;
-import com.yanbenjun.file.parse.regist.type.TypeVerticalMerger;
+import com.yanbenjun.file.parse.regist.merger.TypeVerticalMerger;
 
 public class VerticalMerger extends MidPostRowHandler
 {
@@ -40,7 +42,8 @@ public class VerticalMerger extends MidPostRowHandler
         String primaryKey = toParseTemplate.getPrimaryKey();
         List<ColumnEntry> cells = parsedRow.getCells();
         StringBuffer sb = new StringBuffer();
-        cells.stream().filter(ce->primaryKey.contains(ce.getField())).forEach(ce->sb.append(ce.getModelValue().toString()));
+        cells.stream().filter(ce -> primaryKey.contains(ce.getField()))
+                .forEach(ce -> sb.append(ce.getModelValue().toString()));
         String thisKeyValue = sb.toString();
 
         if (StringUtils.isEmpty(thisKeyValue) || StringUtils.equals(lastKeyValue, thisKeyValue) || lastModelRowMap.isEmpty())
@@ -64,6 +67,14 @@ public class VerticalMerger extends MidPostRowHandler
     {
         ToParseTemplate toParseTemplate = parsedRow.getCurTemplate();
         Map<String, Object> modelRowMap = toParseTemplate.getFullFieldEmptyMap();
+        List<String> existHeads = parseContext.getExistColumnFieldMap().values().stream().collect(Collectors.toList());
+        Iterator<Entry<String, Object>> iter = modelRowMap.entrySet().iterator();
+        while (iter.hasNext()) {
+            Entry<String, Object> entry = iter.next();
+            if (!existHeads.contains(entry.getKey())) {
+                iter.remove();
+            }
+        }
         for (Entry<String,List<Object>> entry : lastModelRowMap.entrySet())
         {
             String title = entry.getKey();
@@ -86,7 +97,7 @@ public class VerticalMerger extends MidPostRowHandler
         {
             ColumnEntry ce = cells.get(i);
             String field = ce.getField();
-            if(lastModelRowMap.get(field) == null)
+            if (lastModelRowMap.get(field) == null)
             {
                 lastModelRowMap.put(field, new ArrayList<Object>());
             }
@@ -95,5 +106,4 @@ public class VerticalMerger extends MidPostRowHandler
         }
         
     }
-
 }

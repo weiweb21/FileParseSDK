@@ -11,7 +11,7 @@ import com.yanbenjun.file.parse.core.post.infs.PostRowHandler;
 import com.yanbenjun.file.parse.message.CellParseMessage;
 import com.yanbenjun.file.parse.message.ParseContext;
 import com.yanbenjun.file.parse.message.RowParseMessage;
-import com.yanbenjun.file.parse.regist.type.SingleCellValidator;
+import com.yanbenjun.file.parse.regist.validator.SingleCellValidator;
 
 /**
  * 单字段校验，用于除FileParseExtractor所有PostHandler的最前端
@@ -57,6 +57,9 @@ public class TypeValidateHandler extends MidPostRowHandler {
                     rowParseMessage.add(cellMsg);
                     break;
                 }
+                
+                //转换没有校验错误的单元格的值
+                ce.setModelValue(validator.convert(cellValue));
             }
         }
         

@@ -1,10 +1,10 @@
 package com.yanbenjun.file.parse.regist;
 
-import com.yanbenjun.file.parse.regist.type.BooleanConvertor;
-import com.yanbenjun.file.parse.regist.type.DoubleConverter;
-import com.yanbenjun.file.parse.regist.type.IntegerConverter;
-import com.yanbenjun.file.parse.regist.type.StringConvertor;
-import com.yanbenjun.file.parse.regist.type.TypeConvertor;
+import com.yanbenjun.file.parse.regist.convertor.BooleanConvertor;
+import com.yanbenjun.file.parse.regist.convertor.DoubleConverter;
+import com.yanbenjun.file.parse.regist.convertor.IntegerConverter;
+import com.yanbenjun.file.parse.regist.convertor.StringConvertor;
+import com.yanbenjun.file.parse.regist.convertor.TypeConvertor;
 
 public class TypeConvertorRegister extends AbstractRegister
 {

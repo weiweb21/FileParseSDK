@@ -14,11 +14,11 @@ import com.yanbenjun.file.parse.regist.ToParserFileTypeRegister;
 import com.yanbenjun.file.parse.regist.TypeConvertorRegister;
 import com.yanbenjun.file.parse.regist.TypeHorizontalMergerRegister;
 import com.yanbenjun.file.parse.regist.TypeVerticalMergerRegister;
-import com.yanbenjun.file.parse.regist.type.MultiCellValidator;
-import com.yanbenjun.file.parse.regist.type.SingleCellValidator;
-import com.yanbenjun.file.parse.regist.type.TypeConvertor;
-import com.yanbenjun.file.parse.regist.type.TypeHorizontalMerger;
-import com.yanbenjun.file.parse.regist.type.TypeVerticalMerger;
+import com.yanbenjun.file.parse.regist.convertor.TypeConvertor;
+import com.yanbenjun.file.parse.regist.merger.TypeHorizontalMerger;
+import com.yanbenjun.file.parse.regist.merger.TypeVerticalMerger;
+import com.yanbenjun.file.parse.regist.validator.MultiCellValidator;
+import com.yanbenjun.file.parse.regist.validator.SingleCellValidator;
 
 
 //TODO

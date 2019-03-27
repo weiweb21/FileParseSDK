@@ -2,7 +2,7 @@ package com.yanbenjun.file.parse.regist.validator.factory;
 
 import com.yanbenjun.file.parse.regist.ICanRegist;
 import com.yanbenjun.file.parse.regist.TypeValidatorRegister;
-import com.yanbenjun.file.parse.regist.type.SingleCellValidator;
+import com.yanbenjun.file.parse.regist.validator.SingleCellValidator;
 
 public class SimpleCellValidatorFactory extends AbstractValidatorFactory {
 

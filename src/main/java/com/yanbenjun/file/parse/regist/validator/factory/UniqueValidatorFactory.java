@@ -1,6 +1,6 @@
 package com.yanbenjun.file.parse.regist.validator.factory;
 
-import com.yanbenjun.file.parse.regist.type.UniqueValidator;
+import com.yanbenjun.file.parse.regist.validator.UniqueValidator;
 
 public class UniqueValidatorFactory extends AbstractValidatorFactory {
     protected UniqueValidatorFactory(String validatorExpression)

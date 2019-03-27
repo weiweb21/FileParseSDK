@@ -1,6 +1,6 @@
 package com.yanbenjun.file.parse.regist.validator.factory;
 
-import com.yanbenjun.file.parse.regist.type.Validator;
+import com.yanbenjun.file.parse.regist.validator.Validator;
 
 public interface ValidatorFactory {
 
