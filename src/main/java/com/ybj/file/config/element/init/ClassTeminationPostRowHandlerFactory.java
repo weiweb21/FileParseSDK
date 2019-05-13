@@ -4,7 +4,7 @@ import com.ybj.file.config.ParseConfigurationException;
 import com.ybj.file.parse.core.post.TeminationPostRowHandler;
 
 /**
- * 类全名后置处理器生成工厂
+ * 类全名生成处后置处理器生成工厂
  * @author Administrator
  *
  */

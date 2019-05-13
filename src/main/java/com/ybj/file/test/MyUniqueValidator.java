@@ -9,8 +9,8 @@ import com.ybj.file.parse.regist.validator.CacheUniqueValidator;
 
 public class MyUniqueValidator extends CacheUniqueValidator {
 
-    public MyUniqueValidator(List<String> unionKeys) {
-        super(unionKeys);
+    public MyUniqueValidator() {
+        super();
     }
 
     @Override

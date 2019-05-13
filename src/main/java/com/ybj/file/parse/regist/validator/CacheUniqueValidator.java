@@ -12,10 +12,10 @@ public abstract class CacheUniqueValidator extends UniqueValidator
      * 该Field已经存在的值的集合,包括数据库中和已解析的
      */
     private List<Map<String, Object>> existValues = new ArrayList<>();
-
-    public CacheUniqueValidator(List<String> unionKeys)
+    
+    public CacheUniqueValidator()
     {
-        super(unionKeys);
+        super();
         existValues.addAll(queryExistValues());
     }
 

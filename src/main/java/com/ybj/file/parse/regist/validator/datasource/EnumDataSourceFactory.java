@@ -5,6 +5,11 @@ import java.util.Arrays;
 import com.ybj.file.config.ParseConfigurationException;
 import com.ybj.file.config.element.init.ParserBeanUtils;
 
+/**
+ * 枚举数据源静态工厂
+ * @author Administrator
+ *
+ */
 public class EnumDataSourceFactory {
 
     public static EnumDataSource getEnumDataSource(String... enumDataSourceParams) {

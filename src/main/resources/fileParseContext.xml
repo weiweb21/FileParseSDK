@@ -53,7 +53,7 @@
         <!-- 解析点，具体的业务系统，哪里需要解析文件，只需要在请求中传入该解析点ID，就可以自动根据解析点的配置，自动解析入库 -->
 		<parsePoint id="20190326">
 			<toParseFile name="room" mode="single">
-				<toParseTemplate name="powerRoom" sheetIndex="0" handler="com.ybj.file.test.MyRowHandler">
+				<toParseTemplate name="powerRoom" sheetIndex="0" handler="com.ybj.file.test.MyRowHandler" validator="unique(com.ybj.file.test.MyUniqueValidator,room_name)">
 	                <columnHead titleName="机房名称" fieldName="room_name" required="true"
 	                    type="string" validator="notnull"/>
 	                <columnHead titleName="机房位置" fieldName="room_address" required="true"

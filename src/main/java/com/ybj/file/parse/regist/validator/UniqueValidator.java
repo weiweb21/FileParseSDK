@@ -8,7 +8,11 @@ public abstract class UniqueValidator implements MultiCellValidator {
     public static final String REGIST_KEY = "unique";
 
     private List<String> unionKeys = new ArrayList<>();
-
+    
+    public UniqueValidator() {
+        
+    }
+    
     public UniqueValidator(List<String> unionKeys) {
         this.unionKeys.addAll(unionKeys);
     }
@@ -28,4 +32,10 @@ public abstract class UniqueValidator implements MultiCellValidator {
         // TODO Auto-generated method stub
         return "重复的数据";
     }
+    
+    public void addAll(List<String> unionKeys)
+    {
+        this.unionKeys = unionKeys;
+    }
+
 }
