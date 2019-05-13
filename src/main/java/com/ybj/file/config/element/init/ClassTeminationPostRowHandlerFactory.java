@@ -8,15 +8,15 @@ import com.ybj.file.parse.core.post.TeminationPostRowHandler;
  * @author Administrator
  *
  */
-public class ClassTeminationPostRowHandlerFactory implements TeminationPostRowHandlerFactory
+public class ClassTeminationPostRowHandlerFactory implements ParserBeanFactory<TeminationPostRowHandler>
 {
     @Override
     public TeminationPostRowHandler build(String handlerStr) throws ParseConfigurationException
     {
         try
         {
-            Class<?> clazz = Class.forName(handlerStr);
-            Class<? extends TeminationPostRowHandler> handlerClazz = clazz.asSubclass(TeminationPostRowHandler.class);
+            Class<?> cl = Class.forName(handlerStr);
+            Class<? extends TeminationPostRowHandler> handlerClazz = cl.asSubclass(TeminationPostRowHandler.class);
             TeminationPostRowHandler teminationHandler = handlerClazz.newInstance();
             return teminationHandler;
         }

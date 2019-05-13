@@ -9,10 +9,8 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.ybj.file.config.ParseConfigurationException;
 import com.ybj.file.config.ParseInitializable;
-import com.ybj.file.config.element.init.TeminationPostRowHandlerFactory;
-import com.ybj.file.config.element.init.TeminationPostRowHandlerFactoryRegister;
+import com.ybj.file.config.element.init.ParserBeanUtils;
 import com.ybj.file.model.ToParseHead;
 import com.ybj.file.model.ToParserTemplateType;
 import com.ybj.file.parse.core.post.TeminationPostRowHandler;
@@ -348,20 +346,7 @@ public class ToParseTemplate extends XElement implements ParseInitializable
     public void setHandler(String handler)
     {
         this.handler = handler;
-        for (TeminationPostRowHandlerFactory factory : TeminationPostRowHandlerFactoryRegister.getAllRegistedHandlerFactorys()) {
-            try
-            {
-                this.teminationPostRowHandler = factory.build(handler);
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-        }
-        
-        if (this.teminationPostRowHandler == null) {
-            throw new ParseConfigurationException("找不到“"+this.handler+"”对应的处理器对象。");
-        }
+        this.teminationPostRowHandler = ParserBeanUtils.getBean(handler, TeminationPostRowHandler.class);
     }
 
     public TeminationPostRowHandler getTeminationPostRowHandler()
