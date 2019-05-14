@@ -27,4 +27,8 @@ public class ParseConfigurationException extends RuntimeException
         super(e);
     }
 
+    public ParseConfigurationException(String error, Throwable e) {
+        super(error, e);
+    }
+
 }

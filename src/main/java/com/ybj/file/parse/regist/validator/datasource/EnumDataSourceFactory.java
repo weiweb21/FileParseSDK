@@ -16,9 +16,11 @@ public class EnumDataSourceFactory {
         String dataSourceType = enumDataSourceParams[0];
         String[] params = Arrays.copyOfRange(enumDataSourceParams, 1,
                 enumDataSourceParams.length);
-        if (dataSourceType.equals("expression")) {
+        if ("expression".equals(dataSourceType)) {
             return new ExpressionEnumDataSource(params);
-        } else if (dataSourceType.equals("query")) {
+        } else if ("enumclass".equals(dataSourceType)) {
+            return new EnumClassEnumDataSource(params[0]);
+        } else if ("query".equals(dataSourceType)) {
             try {
                 return ParserBeanUtils.getBean(params[0], DbEnumDataSource.class);
             } catch (ParseConfigurationException e) {

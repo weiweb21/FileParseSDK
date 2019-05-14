@@ -10,18 +10,14 @@ import com.ybj.file.parse.regist.validator.datasource.EnumDataSourceFactory;
 public class EnumCellValidatorFactory implements ValidatorFactory {
 
     public static final String REGIST_KEY = EnumValidator.REGIST_KEY;
+
     @Override
     public SingleCellValidator newValidator(String... params) {
-        try {
-            EnumValidator enumValidator = new EnumValidator();
-            Map<String, Object> keyvalueMap = EnumDataSourceFactory
-                    .getEnumDataSource(Arrays.copyOfRange(params, 1, params.length))
-                    .getKeyvalueMap();
-            enumValidator.putAll(keyvalueMap);
-            return enumValidator;
-        } catch (Exception e) {
-            throw new RuntimeException("枚举表达式异常：" + params[0], e);
-        }
+        EnumValidator enumValidator = new EnumValidator();
+        Map<String, Object> keyvalueMap = EnumDataSourceFactory
+                .getEnumDataSource(Arrays.copyOfRange(params, 1, params.length)).getKeyvalueMap();
+        enumValidator.putAll(keyvalueMap);
+        return enumValidator;
     }
 
     @Override

@@ -14,6 +14,7 @@ public class LocalFileParseTest
         try
         {
             fp.parse();
+            System.out.println(fp.getContext().getHeadParseMessage().getCellParseMsgs());
             fp.getContext().getCurRowMsg();
         }
         catch (ParseException e)

@@ -14,183 +14,159 @@ import com.ybj.file.parse.regist.validator.Validator;
 import com.ybj.file.parse.regist.validator.factory.ValidatorFactory;
 import com.ybj.file.util.ValidatorExpressionUtils;
 
-
 /**
  * 
  * @author Administrator
  *
  */
-@XmlElement(name="columnHead")
-public class ColumnHead extends XElement implements ParseInitializable
-{
+@XmlElement(name = "columnHead")
+public class ColumnHead extends XElement implements ParseInitializable {
+
     /**
      * 文件中的表头名称，用来确定映射关系、表头校验等
      */
-    @XmlAttribute(name="titleName")
+    @XmlAttribute(name = "titleName")
     private String titleName;
-    
+
     /**
      * 在表头中，是否必须出现，true表示必须出现
      */
-    @XmlAttribute(name="required")
+    @XmlAttribute(name = "required")
     private boolean required;
-    
-    @XmlAttribute(name="fieldName")
+
+    @XmlAttribute(name = "fieldName")
     private String fieldName;
-    
+
     private String dbFieldName;
-    
-    @XmlAttribute(name="type")
+
+    @XmlAttribute(name = "type")
     private String convertorType = StringConvertor.REGIST_KEY;
-    
-    @XmlAttribute(name="horizontalMerger")
+
+    @XmlAttribute(name = "horizontalMerger")
     private String horizontalMergerType = StringJoinMerger.REGIST_KEY;
-    
+
     private String verticalMergerType = FirstNoneEmptyMerger.REGIST_KEY;
-    
-    @XmlAttribute(name="validator")
+
+    @XmlAttribute(name = "validator")
     private String validatorType = NoneValidator.REGIST_KEY;
-    
+
     private List<SingleCellValidator> singleCellValidators = new ArrayList<>();
+
     /**
      * 擴展信息
      */
-    @XmlAttribute(name="xmlExtendInfo")
+    @XmlAttribute(name = "xmlExtendInfo")
     private String extendInfo;
-    
+
     /**
      * 父级模板
      */
     private ToParseTemplate parentToParseTemplate;
 
-    public ColumnHead()
-    {
-        
+    public ColumnHead() {
+
     }
-    
-    public ColumnHead(String titleName, String fieldName)
-    {
-        this(titleName,fieldName,false);
+
+    public ColumnHead(String titleName, String fieldName) {
+        this(titleName, fieldName, false);
     }
-    
-    public ColumnHead(String titleName, String fieldName, boolean required)
-    {
+
+    public ColumnHead(String titleName, String fieldName, boolean required) {
         this.titleName = titleName;
         this.fieldName = fieldName;
         this.required = required;
     }
-    
-    public String getTitleName()
-    {
+
+    public String getTitleName() {
         return titleName;
     }
 
-    public void setTitleName(String titleName)
-    {
+    public void setTitleName(String titleName) {
         this.titleName = titleName;
     }
 
-    public boolean isRequired()
-    {
+    public boolean isRequired() {
         return required;
     }
 
-    public void setRequired(boolean required)
-    {
+    public void setRequired(boolean required) {
         this.required = required;
     }
-    
-    public String toString()
-    {
-        return "{" + this.titleName + ", " + this.required +"}";
+
+    public String toString() {
+        return "{" + this.titleName + ", " + this.required + "}";
     }
 
-    public String getFieldName()
-    {
+    public String getFieldName() {
         return fieldName;
     }
 
-    public void setFieldName(String fieldName)
-    {
+    public void setFieldName(String fieldName) {
         this.fieldName = fieldName;
     }
 
-    public String getDbFieldName()
-    {
+    public String getDbFieldName() {
         return dbFieldName;
     }
 
-    public void setDbFieldName(String dbFieldName)
-    {
+    public void setDbFieldName(String dbFieldName) {
         this.dbFieldName = dbFieldName;
     }
 
-    public String getConvertorType()
-    {
+    public String getConvertorType() {
         return convertorType;
     }
 
-    public ColumnHead setConvertorType(String convertorType)
-    {
+    public ColumnHead setConvertorType(String convertorType) {
         this.convertorType = convertorType;
         return this;
     }
 
-    public String getHorizontalMergerType()
-    {
+    public String getHorizontalMergerType() {
         return horizontalMergerType;
     }
 
-    public ColumnHead setHorizontalMergerType(String horizontalMergerType)
-    {
+    public ColumnHead setHorizontalMergerType(String horizontalMergerType) {
         this.horizontalMergerType = horizontalMergerType;
         return this;
     }
 
-    public String getVerticalMergerType()
-    {
+    public String getVerticalMergerType() {
         return verticalMergerType;
     }
 
-    public ColumnHead setVerticalMergerType(String verticalMergerType)
-    {
+    public ColumnHead setVerticalMergerType(String verticalMergerType) {
         this.verticalMergerType = verticalMergerType;
         return this;
     }
 
-    public String getValidatorType()
-    {
+    public String getValidatorType() {
         return validatorType;
     }
 
-    public ColumnHead setValidatorType(String validatorType)
-    {
+    public ColumnHead setValidatorType(String validatorType) {
         this.validatorType = validatorType;
         return this;
     }
 
-    public String getExtendInfo()
-    {
+    public String getExtendInfo() {
         return extendInfo;
     }
 
-    public void setExtendInfo(String extendInfo)
-    {
+    public void setExtendInfo(String extendInfo) {
         this.extendInfo = extendInfo;
     }
 
     @Override
-    public void clear()
-    {
+    public void clear() {
         // TODO Auto-generated method stub
-        
+
     }
 
-    public List<SingleCellValidator> getSingleCellValidators()
-    {
+    public List<SingleCellValidator> getSingleCellValidators() {
         return singleCellValidators;
     }
-    
+
     public void add(SingleCellValidator cellValidator) {
         singleCellValidators.add(cellValidator);
     }
@@ -207,11 +183,16 @@ public class ColumnHead extends XElement implements ParseInitializable
     public void before() {
         String[] expressions = this.validatorType.split("\\|");
         singleCellValidators.clear();
+
         for (String expression : expressions) {
-            String[] params = ValidatorExpressionUtils.parseValidatorExpression(expression);
-            ValidatorFactory vFactory = ValidatorFactoryRegister.singleton().getValidatorFactory(params[0]);
-            Validator validator = vFactory.newValidator(params);
-            singleCellValidators.add((SingleCellValidator) validator);
+            try {
+                String[] params = ValidatorExpressionUtils.parseValidatorExpression(expression);
+                ValidatorFactory vFactory = ValidatorFactoryRegister.singleton().getValidatorFactory(params[0]);
+                Validator validator = vFactory.newValidator(params);
+                singleCellValidators.add((SingleCellValidator) validator);
+            } catch (Exception e) {
+                throw new RuntimeException("枚举表达式异常：" + expression, e);
+            }
         }
     }
 }
