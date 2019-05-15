@@ -155,6 +155,7 @@ parsePoint对应我们的应用系统中的导入接口，对应前台的一个�
 | id | 解析点唯一标识 | 属性 | Long | must |
 | toParseFile | 文件模板 | 子节点 | multi | 与refFile二者必须至少有一个 |
 | refFile | 引用公共的toParseFile | 子节点 | multi | 与toParseFile二者必须至少有一个 |
+
 说明：
 1）、当parsePoint下有多个toParseFile，代表该导入接口支持多文件模板解析，解析系统能够自动识别用户上传的文件，根据文件里的label（对应toParseFile的属性name）自动识别该上传文件解析使用的toParseFile文件模板。
 2）、当parsePoint下只有一个toParseFile，代表该导入接口支持toParseFile匹配文件模板的解析，用户上传的文件无需要label，解析系统会自动识别所有上传的文件为toParseFile文件模板类型的导入文件。
