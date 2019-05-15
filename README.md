@@ -162,6 +162,7 @@ parsePoint对应我们的应用系统中的导入接口，对应前台的一个�
 
 #### 3、toParseFile
 toParseFile对应我们需要解析的文件模板，注意这里是文件模板，不是文件本身。
+
 | 属性or子节点 | 描述 | 类型 | 限制条件 | 备注 |
 | ------ | --------- | ---- | --------------- | --- |
 | name | 文件模板名称 | 属性 | String | must |
@@ -171,6 +172,7 @@ toParseFile对应我们需要解析的文件模板，注意这里是文件模板
 
 #### 4、toParseTemplate
 toParseTemplate对应我们真正解析的文件内容模板（如Excel的sheet页模板）。
+
 | 属性or子节点 | 描述 | 类型 | 限制条件 | 备注 |
 | ------ | --------- | ---- | --------------- | --- |
 | name | sheet模板名称 | 属性 | String | optional |
@@ -184,6 +186,7 @@ toParseTemplate对应我们真正解析的文件内容模板（如Excel的sheet�
 
 #### 5、columnHead
 columnHead对应我们sheet页表头属性。
+
 | 属性or子节点 | 描述 | 类型 | 限制条件 | 备注 |
 | ---- | --------------- | ---- | --- | ----- |
 | id | 列ID | 属性 | number | optional，在公共columns下使用时必填 |
