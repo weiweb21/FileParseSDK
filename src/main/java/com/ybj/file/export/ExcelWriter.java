@@ -1,4 +1,4 @@
-package com.cmiot.mng.file.export;
+package com.ybj.file.export;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -12,6 +12,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
@@ -20,14 +22,11 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
 
-import com.cmiot.mng.file.export.templates.SheetWriteTemplate;
+import com.ybj.file.export.templates.SheetWriteTemplate;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 public abstract class ExcelWriter {
-
     private static int dataFlushSize = 1000;
+    private Log log = LogFactory.getLog(ExcelWriter.class);
 
     /**
      * 1.向輸出數據流中寫入Excel數據

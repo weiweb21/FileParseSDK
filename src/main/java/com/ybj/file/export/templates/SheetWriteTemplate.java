@@ -1,9 +1,9 @@
-package com.cmiot.mng.file.export.templates;
+package com.ybj.file.export.templates;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.cmiot.mng.file.export.PageDataQuery;
+import com.ybj.file.export.PageDataQuery;
 
 public class SheetWriteTemplate {
 

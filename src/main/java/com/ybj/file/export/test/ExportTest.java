@@ -1,4 +1,4 @@
-package com.cmiot.mng.file.export.test;
+package com.ybj.file.export.test;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -10,8 +10,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.cmiot.mng.file.export.ExcelExportUtils;
-import com.cmiot.mng.file.export.templates.SheetWriteTemplate;
+import com.ybj.file.export.ExcelExportUtils;
+import com.ybj.file.export.templates.SheetWriteTemplate;
 
 public class ExportTest {
 
