@@ -15,7 +15,7 @@ Excel导入框架使用说明
 1、非SpringBoot项目，POM 引入 Java SDK  
 
 ```xml
-<groupId>com.cmiot</groupId>
+<groupId>com.yanbenjun</groupId>
 <artifactId>FileParseSDK</artifactId>
 <version>0.0.1-SNAPSHOT</version>
 ```
@@ -23,12 +23,11 @@ Excel导入框架使用说明
 2、SpringBoot项目，POM引入SpringBoot Starter
 
 ```xml
-<groupId>com.cmiot</groupId>
+<groupId>com.yanbenjun</groupId>
 <artifactId>spring-boot-FileParse-starter</artifactId>
 <version>0.0.1-SNAPSHOT</version>
 ```
 
-3、将源码集成到Lion框架中（使用最新版的spring-boot-mng-starter）
 
 ### 二、简单的示例
 
